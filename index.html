@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIZEN NIGHTS | Movie Night Events</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="manga-bg">
+        <div class="speed-lines"></div>
+        <div class="halftone-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-kaizen">KAIZEN</span>
+                <span class="logo-nights">NIGHTS</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#tickets">TICKETS</a></li>
+                <li><a href="#about">ABOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">次のイベント • NEXT EVENT</div>
+            <h1 class="hero-title">
+                <span class="title-main">KAIZEN</span>
+                <span class="title-sub">NIGHTS</span>
+            </h1>
+            <p class="hero-tagline">映画の夜 • MOVIE NIGHT EXPERIENCE</p>
+            <p class="hero-description">
+                Immerse yourself in an unforgettable anime movie night experience. 
+                Gaming zones, premium snacks, and the ultimate cinema atmosphere await.
+            </p>
+            <div class="hero-date">
+                <div class="date-box">
+                    <span class="date-label">NEXT EVENT</span>
+                    <span class="date-value">JAN 25, 2026</span>
+                </div>
+                <div class="date-box">
+                    <span class="date-label">VENUE</span>
+                    <span class="date-value">KAIZEN HALL</span>
+                </div>
+            </div>
+            <a href="#tickets" class="cta-button">
+                <span class="cta-text">GET YOUR TICKETS</span>
+                <span class="cta-jp">チケットを購入</span>
+            </a>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-card card-1">🎬</div>
+            <div class="floating-card card-2">🎮</div>
+            <div class="floating-card card-3">🍿</div>
+        </div>
+    </section>
+
+    <!-- Tickets Section -->
+    <section id="tickets" class="tickets-section">
+        <div class="section-header">
+            <span class="section-jp">チケット</span>
+            <h2 class="section-title">CHOOSE YOUR PASS</h2>
+            <p class="section-subtitle">Select the experience that fits your vibe</p>
+        </div>
+
+        <div class="tickets-container">
+            <!-- Basic Ticket -->
+            <div class="ticket-card" data-ticket="basic">
+                <div class="ticket-ribbon">BASIC</div>
+                <div class="ticket-header">
+                    <span class="ticket-jp">ベーシック</span>
+                    <h3 class="ticket-name">CINEMA PASS</h3>
+                </div>
+                <div class="ticket-price">
+                    <span class="currency">GHS</span>
+                    <span class="amount">50</span>
+                </div>
+                <ul class="ticket-features">
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Cinema Room Access
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        One Movie Screening
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Comfortable Seating
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Gaming Zone
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Snacks & Drinks
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Exclusive Merch
+                    </li>
+                </ul>
+                <button class="ticket-btn" onclick="selectTicket('basic', 50)">
+                    SELECT PASS
+                </button>
+            </div>
+
+            <!-- Premium Ticket -->
+            <div class="ticket-card featured" data-ticket="premium">
+                <div class="ticket-ribbon">POPULAR</div>
+                <div class="ticket-header">
+                    <span class="ticket-jp">プレミアム</span>
+                    <h3 class="ticket-name">PREMIUM PASS</h3>
+                </div>
+                <div class="ticket-price">
+                    <span class="currency">GHS</span>
+                    <span class="amount">80</span>
+                </div>
+                <ul class="ticket-features">
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Cinema Room Access
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        All Movie Screenings
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Priority Seating
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Gaming Zone Access
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Basic Snacks & Drinks
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Exclusive Merch
+                    </li>
+                </ul>
+                <button class="ticket-btn" onclick="selectTicket('premium', 80)">
+                    SELECT PASS
+                </button>
+            </div>
+
+            <!-- Ultimate Ticket -->
+            <div class="ticket-card ultimate" data-ticket="ultimate">
+                <div class="ticket-ribbon">ULTIMATE</div>
+                <div class="ticket-header">
+                    <span class="ticket-jp">アルティメット</span>
+                    <h3 class="ticket-name">VIP PASS</h3>
+                </div>
+                <div class="ticket-price">
+                    <span class="currency">GHS</span>
+                    <span class="amount">120</span>
+                </div>
+                <ul class="ticket-features">
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Cinema Room Access
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        All Movie Screenings
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        VIP Front Row Seating
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Unlimited Gaming Zone
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Premium Snacks & Drinks
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Exclusive Kaizen Merch
+                    </li>
+                </ul>
+                <button class="ticket-btn" onclick="selectTicket('ultimate', 120)">
+                    SELECT PASS
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-content">
+                <span class="section-jp">私たちについて</span>
+                <h2 class="section-title">ABOUT KAIZEN NIGHTS</h2>
+                <p class="about-text">
+                    Kaizen Nights brings the ultimate anime and movie experience to life. 
+                    Our events combine the magic of cinema with gaming culture, creating 
+                    unforgettable nights for fans and newcomers alike.
+                </p>
+                <p class="about-text">
+                    Every event is carefully curated to deliver an immersive atmosphere 
+                    with premium facilities, delicious snacks, and a community of 
+                    like-minded enthusiasts.
+                </p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Happy Attendees</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Events Hosted</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            
+            <!-- Step 1: Details -->
+            <div id="step1" class="checkout-step active">
+                <div class="step-header">
+                    <span class="step-jp">ステップ 1</span>
+                    <h3>YOUR DETAILS</h3>
+                </div>
+                <div class="selected-ticket-summary">
+                    <div class="summary-row">
+                        <span>Selected Pass:</span>
+                        <span id="selectedTicketName">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Price:</span>
+                        <span id="selectedTicketPrice">GHS 0</span>
+                    </div>
+                </div>
+                <form id="customerForm" class="checkout-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">WhatsApp Number</label>
+                        <input type="tel" id="phone" placeholder="+233 XX XXX XXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Number of Tickets</label>
+                        <select id="quantity" onchange="updateTotal()">
+                            <option value="1">1 Ticket</option>
+                            <option value="2">2 Tickets</option>
+                            <option value="3">3 Tickets</option>
+                            <option value="4">4 Tickets</option>
+                            <option value="5">5 Tickets</option>
+                        </select>
+                    </div>
+                    <div class="total-display">
+                        <span>Total Amount:</span>
+                        <span id="totalAmount">GHS 0</span>
+                    </div>
+                    <button type="button" class="checkout-btn" onclick="goToStep(2)">
+                        PROCEED TO PAYMENT
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div id="step2" class="checkout-step">
+                <div class="step-header">
+                    <span class="step-jp">ステップ 2</span>
+                    <h3>MOBILE MONEY PAYMENT</h3>
+                </div>
+                <div class="payment-info">
+                    <div class="momo-details">
+                        <div class="momo-icon">📱</div>
+                        <h4>Send Payment To:</h4>
+                        <div class="momo-number">
+                            <span class="network">MTN MoMo</span>
+                            <span class="number">024 XXX XXXX</span>
+                        </div>
+                        <div class="momo-name">KAIZEN NIGHTS AGENCY</div>
+                        <div class="payment-amount">
+                            Amount: <strong id="paymentAmount">GHS 0</strong>
+                        </div>
+                    </div>
+                    <div class="payment-instructions">
+                        <h4>Instructions:</h4>
+                        <ol>
+                            <li>Dial *170# on your phone</li>
+                            <li>Select "Transfer Money"</li>
+                            <li>Enter the number above</li>
+                            <li>Enter the exact amount shown</li>
+                            <li>Confirm the transaction</li>
+                            <li>Take a screenshot of confirmation</li>
+                        </ol>
+                    </div>
+                </div>
+                <button type="button" class="checkout-btn" onclick="goToStep(3)">
+                    I'VE MADE THE PAYMENT
+                </button>
+                <button type="button" class="back-btn" onclick="goToStep(1)">
+                    ← Go Back
+                </button>
+            </div>
+
+            <!-- Step 3: Upload Proof -->
+            <div id="step3" class="checkout-step">
+                <div class="step-header">
+                    <span class="step-jp">ステップ 3</span>
+                    <h3>UPLOAD PAYMENT PROOF</h3>
+                </div>
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('proofUpload').click()">
+                        <div class="upload-icon">📤</div>
+                        <p>Click to upload screenshot</p>
+                        <span class="upload-hint">PNG, JPG or PDF (Max 5MB)</span>
+                    </div>
+                    <input type="file" id="proofUpload" accept="image/*,.pdf" hidden onchange="handleFileUpload(event)">
+                    <div id="uploadPreview" class="upload-preview hidden">
+                        <img id="previewImage" src="" alt="Preview">
+                        <span id="fileName"></span>
+                        <button class="remove-file" onclick="removeFile()">✕ Remove</button>
+                    </div>
+                </div>
+                <div class="reference-input">
+                    <label for="transactionRef">Transaction Reference (Optional)</label>
+                    <input type="text" id="transactionRef" placeholder="e.g., MOMO123456789">
+                </div>
+                <button type="button" class="checkout-btn" onclick="submitOrder()" id="submitBtn">
+                    SUBMIT FOR VERIFICATION
+                </button>
+                <button type="button" class="back-btn" onclick="goToStep(2)">
+                    ← Go Back
+                </button>
+            </div>
+
+            <!-- Step 4: Confirmation -->
+            <div id="step4" class="checkout-step">
+                <div class="confirmation-content">
+                    <div class="success-icon">✓</div>
+                    <span class="step-jp">完了</span>
+                    <h3>ORDER SUBMITTED!</h3>
+                    <p class="confirmation-text">
+                        Thank you for your order! We're verifying your payment.
+                    </p>
+                    <div class="confirmation-details">
+                        <p>Your ticket will be sent to your WhatsApp number:</p>
+                        <span id="confirmPhone" class="highlight-phone">+233 XX XXX XXXX</span>
+                    </div>
+                    <div class="confirmation-note">
+                        <p>📱 Please keep your phone handy</p>
+                        <p>⏱️ Verification usually takes 5-30 minutes</p>
+                        <p>❓ Questions? DM us on Instagram @kaizennights</p>
+                    </div>
+                    <button type="button" class="checkout-btn" onclick="closeModal()">
+                        DONE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="logo-kaizen">KAIZEN</span>
+                <span class="logo-nights">NIGHTS</span>
+            </div>
+            <div class="footer-socials">
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">Twitter</a>
+                <a href="#" class="social-link">TikTok</a>
+            </div>
+            <p class="footer-copy">© 2026 Kaizen Nights Agency. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1270 @@
+/* ============================================
+   KAIZEN NIGHTS - Anime/Manga Inspired Styles
+   ============================================ */
+
+/* CSS Variables */
+:root {
+    --primary-red: #E71C23;
+    --dark-red: #8B0000;
+    --accent-red: #FF3347;
+    --pure-black: #000000;
+    --rich-black: #0A0A0A;
+    --dark-gray: #1A1A1A;
+    --medium-gray: #2A2A2A;
+    --light-gray: #888888;
+    --pure-white: #FFFFFF;
+    --off-white: #F5F5F5;
+    
+    --font-display: 'Dela Gothic One', cursive;
+    --font-heading: 'Bebas Neue', sans-serif;
+    --font-body: 'Noto Sans JP', sans-serif;
+    
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.4s ease;
+    --transition-slow: 0.6s ease;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--rich-black);
+    color: var(--pure-white);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Animated Manga Background */
+.manga-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.speed-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 50px,
+        rgba(231, 28, 35, 0.03) 50px,
+        rgba(231, 28, 35, 0.03) 51px
+    );
+    animation: speedPulse 4s ease-in-out infinite;
+}
+
+.halftone-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+@keyframes speedPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, transparent 100%);
+    padding: 1.5rem 0;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.logo-kaizen {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--pure-white);
+    letter-spacing: 0.1em;
+}
+
+.logo-nights {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--primary-red);
+    letter-spacing: 0.4em;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 3rem;
+}
+
+.nav-links a {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--pure-white);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    position: relative;
+    transition: color var(--transition-fast);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-red);
+    transition: width var(--transition-fast);
+}
+
+.nav-links a:hover {
+    color: var(--primary-red);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 100%;
+    background: radial-gradient(ellipse at 80% 30%, rgba(231, 28, 35, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.hero-content {
+    max-width: 800px;
+    text-align: center;
+    z-index: 1;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: var(--primary-red);
+    color: var(--pure-white);
+    padding: 0.5rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+    clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.hero-title {
+    margin-bottom: 1rem;
+}
+
+.title-main {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 15vw, 10rem);
+    color: var(--pure-white);
+    line-height: 0.9;
+    letter-spacing: 0.05em;
+    text-shadow: 
+        4px 4px 0 var(--primary-red),
+        8px 8px 0 rgba(231, 28, 35, 0.3);
+    animation: titleSlide 1s ease-out;
+}
+
+.title-sub {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 8vw, 5rem);
+    color: var(--primary-red);
+    letter-spacing: 0.5em;
+    margin-left: 0.5em;
+    animation: titleSlide 1s ease-out 0.2s backwards;
+}
+
+@keyframes titleSlide {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-tagline {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--light-gray);
+    letter-spacing: 0.2em;
+    margin-bottom: 1.5rem;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: var(--off-white);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    opacity: 0.9;
+}
+
+.hero-date {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.date-box {
+    background: var(--dark-gray);
+    border: 1px solid var(--medium-gray);
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.date-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-red);
+}
+
+.date-label {
+    font-size: 0.75rem;
+    color: var(--light-gray);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.25rem;
+}
+
+.date-value {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--pure-white);
+    letter-spacing: 0.1em;
+}
+
+.cta-button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--primary-red);
+    color: var(--pure-white);
+    text-decoration: none;
+    padding: 1.2rem 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+.cta-button:hover {
+    background: var(--dark-red);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(231, 28, 35, 0.4);
+}
+
+.cta-text {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+}
+
+.cta-jp {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    letter-spacing: 0.1em;
+}
+
+/* Floating Cards */
+.hero-visual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-card {
+    position: absolute;
+    font-size: 4rem;
+    opacity: 0.15;
+    animation: float 6s ease-in-out infinite;
+}
+
+.card-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.card-2 {
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.card-3 {
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Tickets Section */
+.tickets-section {
+    padding: 6rem 2rem;
+    background: linear-gradient(180deg, var(--rich-black) 0%, var(--dark-gray) 50%, var(--rich-black) 100%);
+    position: relative;
+}
+
+.tickets-section::before {
+    content: 'チケット';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 25vw;
+    color: rgba(231, 28, 35, 0.03);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-jp {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--primary-red);
+    letter-spacing: 0.3em;
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--pure-white);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--light-gray);
+}
+
+.tickets-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.ticket-card {
+    background: var(--dark-gray);
+    border: 1px solid var(--medium-gray);
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: all var(--transition-medium);
+    overflow: hidden;
+}
+
+.ticket-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--medium-gray);
+    transition: background var(--transition-fast);
+}
+
+.ticket-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-red);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.ticket-card:hover::before {
+    background: var(--primary-red);
+}
+
+.ticket-card.featured {
+    border-color: var(--primary-red);
+    transform: scale(1.05);
+}
+
+.ticket-card.featured::before {
+    background: var(--primary-red);
+}
+
+.ticket-card.featured:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+
+.ticket-card.ultimate {
+    background: linear-gradient(135deg, var(--dark-gray) 0%, rgba(139, 0, 0, 0.2) 100%);
+}
+
+.ticket-ribbon {
+    position: absolute;
+    top: 1rem;
+    right: -2rem;
+    background: var(--primary-red);
+    color: var(--pure-white);
+    padding: 0.3rem 2.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    transform: rotate(45deg);
+}
+
+.ticket-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.ticket-jp {
+    font-size: 0.8rem;
+    color: var(--primary-red);
+    letter-spacing: 0.2em;
+}
+
+.ticket-name {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--pure-white);
+    letter-spacing: 0.05em;
+}
+
+.ticket-price {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--medium-gray);
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.currency {
+    font-size: 1rem;
+    color: var(--light-gray);
+    vertical-align: top;
+}
+
+.amount {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: var(--pure-white);
+    line-height: 1;
+}
+
+.ticket-features {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.ticket-features li {
+    padding: 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.feature-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.included .feature-icon {
+    background: var(--primary-red);
+    color: var(--pure-white);
+}
+
+.not-included .feature-icon {
+    background: var(--medium-gray);
+    color: var(--light-gray);
+}
+
+.not-included {
+    opacity: 0.5;
+}
+
+.ticket-btn {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 2px solid var(--primary-red);
+    color: var(--primary-red);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.ticket-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-red);
+    transition: left var(--transition-fast);
+    z-index: -1;
+}
+
+.ticket-btn:hover {
+    color: var(--pure-white);
+}
+
+.ticket-btn:hover::before {
+    left: 0;
+}
+
+/* About Section */
+.about-section {
+    padding: 6rem 2rem;
+    background: var(--rich-black);
+}
+
+.about-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-content {
+    text-align: center;
+}
+
+.about-text {
+    font-size: 1.15rem;
+    color: var(--off-white);
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+}
+
+.about-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-number {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--primary-red);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--light-gray);
+    letter-spacing: 0.1em;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--dark-gray);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid var(--medium-gray);
+    animation: modalSlide 0.4s ease-out;
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--medium-gray);
+    color: var(--pure-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+.checkout-step {
+    display: none;
+    padding: 2.5rem;
+}
+
+.checkout-step.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.step-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.step-header .step-jp {
+    font-size: 0.8rem;
+}
+
+.step-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--pure-white);
+    letter-spacing: 0.05em;
+}
+
+.selected-ticket-summary {
+    background: var(--medium-gray);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid var(--primary-red);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.summary-row span:last-child {
+    font-weight: 700;
+    color: var(--primary-red);
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    color: var(--light-gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select {
+    padding: 1rem;
+    background: var(--rich-black);
+    border: 1px solid var(--medium-gray);
+    color: var(--pure-white);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: border-color var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-red);
+}
+
+.form-group input::placeholder {
+    color: var(--light-gray);
+    opacity: 0.6;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group select option {
+    background: var(--dark-gray);
+}
+
+.total-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, var(--dark-gray) 0%, rgba(231, 28, 35, 0.1) 100%);
+    border: 1px solid var(--primary-red);
+    margin-top: 0.5rem;
+}
+
+.total-display span:first-child {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.total-display span:last-child {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--primary-red);
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 1.2rem;
+    background: var(--primary-red);
+    border: none;
+    color: var(--pure-white);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-top: 0.5rem;
+}
+
+.checkout-btn:hover {
+    background: var(--dark-red);
+    transform: translateY(-2px);
+}
+
+.checkout-btn:disabled {
+    background: var(--medium-gray);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.back-btn {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid var(--medium-gray);
+    color: var(--light-gray);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-top: 0.75rem;
+}
+
+.back-btn:hover {
+    border-color: var(--pure-white);
+    color: var(--pure-white);
+}
+
+/* Payment Info */
+.payment-info {
+    text-align: center;
+}
+
+.momo-details {
+    background: var(--medium-gray);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border: 2px dashed var(--primary-red);
+}
+
+.momo-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.momo-details h4 {
+    color: var(--light-gray);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.momo-number {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.momo-number .network {
+    background: #FFC107;
+    color: var(--pure-black);
+    padding: 0.3rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.momo-number .number {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--pure-white);
+    letter-spacing: 0.1em;
+}
+
+.momo-name {
+    font-size: 0.95rem;
+    color: var(--light-gray);
+    margin-bottom: 1rem;
+}
+
+.payment-amount {
+    font-size: 1.1rem;
+    color: var(--pure-white);
+    padding-top: 1rem;
+    border-top: 1px solid var(--light-gray);
+}
+
+.payment-amount strong {
+    color: var(--primary-red);
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+}
+
+.payment-instructions {
+    text-align: left;
+    background: var(--rich-black);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-instructions h4 {
+    color: var(--pure-white);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+}
+
+.payment-instructions ol {
+    padding-left: 1.5rem;
+}
+
+.payment-instructions li {
+    color: var(--off-white);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Upload Section */
+.upload-section {
+    margin-bottom: 1.5rem;
+}
+
+.upload-area {
+    border: 2px dashed var(--medium-gray);
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-red);
+    background: rgba(231, 28, 35, 0.05);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.upload-area p {
+    color: var(--pure-white);
+    margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+    font-size: 0.8rem;
+    color: var(--light-gray);
+}
+
+.upload-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--medium-gray);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.upload-preview.hidden {
+    display: none;
+}
+
+.upload-preview img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 1px solid var(--primary-red);
+}
+
+.upload-preview span {
+    flex: 1;
+    color: var(--pure-white);
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.remove-file {
+    background: transparent;
+    border: 1px solid var(--primary-red);
+    color: var(--primary-red);
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.remove-file:hover {
+    background: var(--primary-red);
+    color: var(--pure-white);
+}
+
+.reference-input {
+    margin-bottom: 1.5rem;
+}
+
+.reference-input label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--light-gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.reference-input input {
+    width: 100%;
+    padding: 1rem;
+    background: var(--rich-black);
+    border: 1px solid var(--medium-gray);
+    color: var(--pure-white);
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+
+.reference-input input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+}
+
+/* Confirmation */
+.confirmation-content {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-red);
+    color: var(--pure-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+    animation: successPop 0.5s ease-out;
+}
+
+@keyframes successPop {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.confirmation-text {
+    font-size: 1.1rem;
+    color: var(--off-white);
+    margin-bottom: 2rem;
+}
+
+.confirmation-details {
+    background: var(--medium-gray);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-details p {
+    color: var(--light-gray);
+    margin-bottom: 0.5rem;
+}
+
+.highlight-phone {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--primary-red);
+}
+
+.confirmation-note {
+    text-align: left;
+    background: var(--rich-black);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-note p {
+    color: var(--off-white);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Footer */
+.footer {
+    background: var(--pure-black);
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--medium-gray);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-logo {
+    margin-bottom: 1.5rem;
+}
+
+.footer-logo .logo-kaizen {
+    font-size: 1.5rem;
+}
+
+.footer-logo .logo-nights {
+    display: block;
+    font-size: 0.8rem;
+}
+
+.footer-socials {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.social-link {
+    color: var(--light-gray);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    transition: color var(--transition-fast);
+}
+
+.social-link:hover {
+    color: var(--primary-red);
+}
+
+.footer-copy {
+    font-size: 0.85rem;
+    color: var(--light-gray);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .hero-date {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .date-box {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .tickets-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .ticket-card.featured {
+        transform: none;
+    }
+    
+    .ticket-card.featured:hover {
+        transform: translateY(-10px);
+    }
+    
+    .about-stats {
+        gap: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+    
+    .modal-content {
+        max-height: 95vh;
+    }
+    
+    .checkout-step {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--rich-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-red);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-red);
+}
+
+/* Selection */
+::selection {
+    background: var(--primary-red);
+    color: var(--pure-white);
+}
