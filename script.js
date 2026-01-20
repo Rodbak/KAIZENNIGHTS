@@ -492,27 +492,30 @@ function generateTicketQR(orderData) {
         d: orderData.paid           // Payment timestamp
     });
     
-    // Generate QR Code using QRCode.js library
-    try {
-        if (typeof QRCode !== 'undefined') {
-            new QRCode(qrContainer, {
-                text: qrData,
-                width: 180,
-                height: 180,
-                colorDark: '#000000',
-                colorLight: '#FFFFFF',
-                correctLevel: QRCode.CorrectLevel.M
-            });
-            console.log('QR Code generated successfully');
-        } else {
-            throw new Error('QRCode library not loaded');
-        }
-    } catch (error) {
-        console.error('QR Code generation error:', error);
-        // Fallback to Google Charts QR API
-        const encodedData = encodeURIComponent(qrData);
-        qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodedData}" alt="QR Code" style="display:block;">`;
-    }
+    // Use QR Server API - most reliable method (works everywhere)
+    const encodedData = encodeURIComponent(qrData);
+    const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedData}&bgcolor=FFFFFF&color=000000&margin=10`;
+    
+    const img = document.createElement('img');
+    img.src = qrImageUrl;
+    img.alt = 'Ticket QR Code';
+    img.style.display = 'block';
+    img.style.width = '200px';
+    img.style.height = '200px';
+    
+    // Handle image load error
+    img.onerror = function() {
+        console.error('QR API failed, showing reference code');
+        qrContainer.innerHTML = `
+            <div style="padding:30px;text-align:center;font-family:monospace;font-size:16px;background:#fff;color:#000;border-radius:8px;">
+                <strong style="font-size:20px;">${orderData.ref}</strong>
+                <br><br>
+                <small style="color:#666;">Reference Code</small>
+            </div>`;
+    };
+    
+    qrContainer.appendChild(img);
+    console.log('QR Code image requested:', qrImageUrl);
 }
 
 // Reset pay button state
