@@ -63,6 +63,8 @@
         
         #reader {
             width: 100%;
+            min-height: 300px;
+            background: #000;
         }
         
         #reader video {
@@ -285,6 +287,10 @@
             border-left: 3px solid var(--primary-red);
         }
         
+        .history-item.warning {
+            border-left: 3px solid var(--warning-yellow);
+        }
+        
         .history-ref {
             font-family: monospace;
             font-weight: 600;
@@ -349,12 +355,36 @@
             color: var(--text-gray);
             text-transform: uppercase;
         }
+        
+        .upload-section {
+            margin-bottom: 1rem;
+        }
+        
+        .upload-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--dark-bg);
+            border: 2px dashed #444;
+            border-radius: 8px;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .upload-btn:hover {
+            border-color: var(--primary-red);
+            color: white;
+        }
+        
+        #qrUpload {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <h1>🎫 KAIZEN NIGHTS</h1>
-        <p>Ticket Scanner & Verification</p>
+        <p>Ticket Scanner - Feb 6, 2026 @ Academic City University</p>
     </header>
     
     <div class="container">
@@ -383,21 +413,26 @@
             </div>
         </div>
         
-        <!-- QR Image Upload (Backup) -->
+        <!-- QR Image Upload -->
         <div class="manual-entry">
-            <h3>📤 Upload QR Screenshot</h3>
+            <h3>📤 Upload QR Image</h3>
             <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 1rem;">
-                If camera doesn't work, upload a screenshot of the QR code
+                Upload a screenshot of the customer's QR code
             </p>
-            <input type="file" id="qrUpload" accept="image/*" onchange="scanUploadedImage(event)" 
-                   style="width: 100%; padding: 0.75rem; background: var(--dark-bg); border: 2px dashed #333; border-radius: 8px; color: white; cursor: pointer;">
+            <input type="file" id="qrUpload" accept="image/*">
+            <label for="qrUpload" class="upload-btn">
+                📁 Click to select QR image
+            </label>
         </div>
 
         <!-- Manual Entry -->
         <div class="manual-entry">
-            <h3>🔤 Manual Reference Lookup</h3>
+            <h3>🔤 Manual Reference Check</h3>
+            <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 1rem;">
+                Enter the reference code starting with KZN-
+            </p>
             <div class="input-group">
-                <input type="text" id="manualRef" placeholder="Enter reference (e.g. KZN-...)" 
+                <input type="text" id="manualRef" placeholder="KZN-XXXXXX-XXXXXX" 
                        onkeypress="if(event.key === 'Enter') lookupReference()">
                 <button class="btn btn-primary" onclick="lookupReference()">🔍</button>
             </div>
@@ -423,6 +458,10 @@
                     <span class="info-value" id="infoCustomer">-</span>
                 </div>
                 <div class="info-row">
+                    <span class="info-label">Phone</span>
+                    <span class="info-value" id="infoPhone">-</span>
+                </div>
+                <div class="info-row">
                     <span class="info-label">Quantity</span>
                     <span class="info-value" id="infoQty">-</span>
                 </div>
@@ -437,7 +476,7 @@
             </div>
             <div class="result-actions">
                 <button class="btn btn-secondary" onclick="clearResult()">Clear</button>
-                <button class="btn btn-primary" onclick="markAsUsed()">✓ Check In</button>
+                <button class="btn btn-primary" id="checkInBtn" onclick="markAsUsed()">✓ Check In</button>
             </div>
         </div>
         
@@ -445,9 +484,9 @@
         <div class="instructions">
             <h3>📋 How to Use</h3>
             <ol>
-                <li>Click "Start Camera" to begin scanning</li>
-                <li>Point camera at customer's QR code</li>
-                <li>Verify the ticket details and access areas</li>
+                <li>Click "Start Camera" and point at QR code</li>
+                <li>OR upload a screenshot of the QR code</li>
+                <li>Verify the ticket details shown</li>
                 <li>Click "Check In" to mark as used</li>
             </ol>
         </div>
@@ -465,8 +504,17 @@
     
     <script>
         let html5QrCode = null;
-        let scanHistory = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-        let checkedIn = JSON.parse(localStorage.getItem('checkedIn') || '[]');
+        let scanHistory = JSON.parse(localStorage.getItem('kaizenScanHistory') || '[]');
+        let checkedIn = JSON.parse(localStorage.getItem('kaizenCheckedIn') || '[]');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHistoryDisplay();
+            updateStats();
+            
+            // File upload handler
+            document.getElementById('qrUpload').addEventListener('change', scanUploadedImage);
+        });
         
         // Stats
         function updateStats() {
@@ -483,145 +531,121 @@
             
             html5QrCode = new Html5Qrcode("reader");
             
+            // Try back camera first
             html5QrCode.start(
                 { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                },
+                { fps: 10, qrbox: { width: 250, height: 250 } },
                 onScanSuccess,
-                onScanError
+                () => {} // Ignore errors
             ).then(() => {
                 startBtn.textContent = '📷 Camera Active';
                 document.getElementById('stopBtn').disabled = false;
-                console.log('Camera started successfully');
             }).catch(err => {
-                console.error('Camera error:', err);
-                startBtn.disabled = false;
-                startBtn.textContent = '📷 Start Camera';
-                
-                // Show helpful error message
-                let errorMsg = 'Camera error: ';
-                if (err.toString().includes('NotAllowedError')) {
-                    errorMsg = '❌ Camera permission denied!\n\nPlease allow camera access:\n• iPhone: Settings → Safari → Camera → Allow\n• Android: Settings → Apps → Chrome → Permissions → Camera';
-                } else if (err.toString().includes('NotFoundError')) {
-                    errorMsg = '❌ No camera found on this device.';
-                } else if (err.toString().includes('NotReadableError')) {
-                    errorMsg = '❌ Camera is being used by another app. Close other apps and try again.';
-                } else if (err.toString().includes('OverconstrainedError')) {
-                    errorMsg = '❌ Camera not compatible. Trying front camera...';
-                    // Try front camera as fallback
-                    tryFrontCamera();
-                    return;
-                } else {
-                    errorMsg += err;
-                }
-                alert(errorMsg);
-            });
-        }
-        
-        // Fallback to front camera
-        function tryFrontCamera() {
-            html5QrCode.start(
-                { facingMode: "user" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                },
-                onScanSuccess,
-                onScanError
-            ).then(() => {
-                document.getElementById('startBtn').textContent = '📷 Front Camera Active';
-                document.getElementById('stopBtn').disabled = false;
-            }).catch(err => {
-                document.getElementById('startBtn').disabled = false;
-                document.getElementById('startBtn').textContent = '📷 Start Camera';
-                alert('❌ Could not access any camera.\n\nMake sure:\n1. You\'re using HTTPS\n2. Camera permission is allowed\n3. No other app is using the camera');
+                console.log('Back camera failed, trying front camera...', err);
+                // Try front camera
+                html5QrCode.start(
+                    { facingMode: "user" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    onScanSuccess,
+                    () => {}
+                ).then(() => {
+                    startBtn.textContent = '📷 Front Camera';
+                    document.getElementById('stopBtn').disabled = false;
+                }).catch(err2 => {
+                    startBtn.disabled = false;
+                    startBtn.textContent = '📷 Start Camera';
+                    alert('Camera Error!\n\nPlease:\n1. Allow camera permission\n2. Use HTTPS (not HTTP)\n3. Close other apps using camera\n\nOr use the "Upload QR Image" option below.');
+                });
             });
         }
         
         // Stop Scanner
         function stopScanner() {
-            if (html5QrCode) {
+            if (html5QrCode && html5QrCode.isScanning) {
                 html5QrCode.stop().then(() => {
                     document.getElementById('startBtn').disabled = false;
+                    document.getElementById('startBtn').textContent = '📷 Start Camera';
                     document.getElementById('stopBtn').disabled = true;
                 });
             }
         }
         
         // On successful scan
-        function onScanSuccess(decodedText, decodedResult) {
+        function onScanSuccess(decodedText) {
             // Vibrate if supported
             if (navigator.vibrate) navigator.vibrate(200);
             
-            // Parse QR data
+            console.log('Scanned:', decodedText);
+            
+            // Try to parse as JSON (QR code data)
             try {
                 const data = JSON.parse(decodedText);
-                displayResult(data, true);
+                // Valid QR code with ticket data
+                if (data.r && data.r.startsWith('KZN-')) {
+                    displayResult(data, true);
+                    return;
+                }
             } catch (e) {
-                // Not JSON, might be just a reference
-                lookupByRef(decodedText);
+                // Not JSON
             }
+            
+            // Check if it's a reference code
+            if (decodedText.startsWith('KZN-')) {
+                displayResult({ r: decodedText }, true);
+                return;
+            }
+            
+            // Invalid
+            displayResult({ r: decodedText }, false);
         }
         
-        function onScanError(error) {
-            // Ignore scan errors (no QR found)
-        }
-        
-        // Scan uploaded QR image
+        // Scan uploaded image
         function scanUploadedImage(event) {
             const file = event.target.files[0];
             if (!file) return;
             
-            const html5QrCodeScanner = new Html5Qrcode("reader");
+            const tempScanner = new Html5Qrcode("reader");
             
-            html5QrCodeScanner.scanFile(file, true)
+            tempScanner.scanFile(file, true)
                 .then(decodedText => {
-                    // Vibrate if supported
                     if (navigator.vibrate) navigator.vibrate(200);
+                    console.log('Image scan result:', decodedText);
                     
                     try {
                         const data = JSON.parse(decodedText);
-                        displayResult(data, true);
-                    } catch (e) {
-                        lookupByRef(decodedText);
-                    }
+                        if (data.r) {
+                            displayResult(data, true);
+                            return;
+                        }
+                    } catch (e) {}
                     
-                    // Clear the file input
-                    event.target.value = '';
+                    if (decodedText.startsWith('KZN-')) {
+                        displayResult({ r: decodedText }, true);
+                    } else {
+                        displayResult({ r: decodedText }, false);
+                    }
                 })
                 .catch(err => {
-                    alert('❌ Could not read QR code from image.\n\nMake sure the image clearly shows the QR code.');
-                    event.target.value = '';
+                    console.error('Image scan error:', err);
+                    alert('Could not read QR code from image.\n\nMake sure:\n- The QR code is clear and visible\n- The image is not blurry\n- The entire QR code is in the image');
+                })
+                .finally(() => {
+                    event.target.value = ''; // Clear input
                 });
         }
         
-        // Lookup by reference
+        // Manual reference lookup
         function lookupReference() {
             const ref = document.getElementById('manualRef').value.trim().toUpperCase();
             if (!ref) {
                 alert('Please enter a reference code');
                 return;
             }
-            lookupByRef(ref);
-        }
-        
-        function lookupByRef(ref) {
-            // Check local storage for orders
-            const orders = JSON.parse(localStorage.getItem('kaizenOrders') || '[]');
-            const order = orders.find(o => o.ref === ref);
             
-            if (order) {
-                displayResult({
-                    r: order.ref,
-                    t: order.ticket,
-                    a: order.access,
-                    q: order.qty,
-                    n: order.customer.name,
-                    p: order.customer.phone,
-                    d: order.paid
-                }, true);
+            // Check if it starts with KZN-
+            if (ref.startsWith('KZN-')) {
+                // Valid format - show as valid
+                displayResult({ r: ref }, true);
             } else {
                 displayResult({ r: ref }, false);
             }
@@ -631,6 +655,7 @@
         function displayResult(data, isValid) {
             const card = document.getElementById('resultCard');
             const header = document.getElementById('resultHeader');
+            const checkInBtn = document.getElementById('checkInBtn');
             
             // Check if already checked in
             const alreadyCheckedIn = checkedIn.includes(data.r);
@@ -639,14 +664,17 @@
                 header.className = 'result-header invalid';
                 document.getElementById('resultIcon').textContent = '✗';
                 document.getElementById('resultStatus').textContent = 'INVALID TICKET';
+                checkInBtn.style.display = 'none';
             } else if (alreadyCheckedIn) {
                 header.className = 'result-header warning';
                 document.getElementById('resultIcon').textContent = '⚠';
-                document.getElementById('resultStatus').textContent = 'ALREADY USED';
+                document.getElementById('resultStatus').textContent = 'ALREADY CHECKED IN';
+                checkInBtn.style.display = 'none';
             } else {
                 header.className = 'result-header valid';
                 document.getElementById('resultIcon').textContent = '✓';
                 document.getElementById('resultStatus').textContent = 'VALID TICKET';
+                checkInBtn.style.display = 'block';
             }
             
             // Ticket type names
@@ -659,9 +687,10 @@
             
             // Fill in details
             document.getElementById('infoRef').textContent = data.r || '-';
-            document.getElementById('infoTicket').textContent = ticketNames[data.t] || data.t || '-';
+            document.getElementById('infoTicket').textContent = ticketNames[data.t] || data.t || 'Unknown';
             document.getElementById('infoCustomer').textContent = data.n || '-';
-            document.getElementById('infoQty').textContent = data.q || '-';
+            document.getElementById('infoPhone').textContent = data.p || '-';
+            document.getElementById('infoQty').textContent = data.q || '1';
             document.getElementById('infoPaid').textContent = data.d ? new Date(data.d).toLocaleString() : '-';
             
             // Access badges
@@ -671,30 +700,31 @@
                     `<span class="access-badge ${a.toLowerCase()}">${a}</span>`
                 ).join('');
             } else {
-                accessContainer.innerHTML = '-';
+                accessContainer.innerHTML = '<span style="color: var(--text-gray);">-</span>';
             }
             
             card.classList.add('show');
             
             // Add to history
-            addToHistory(data.r, isValid && !alreadyCheckedIn);
+            addToHistory(data.r, isValid, alreadyCheckedIn);
             
             // Store current scan data
             window.currentScanData = data;
         }
         
         // Add to scan history
-        function addToHistory(ref, valid) {
+        function addToHistory(ref, valid, alreadyUsed) {
             const entry = {
                 ref: ref,
-                valid: valid,
+                valid: valid && !alreadyUsed,
+                alreadyUsed: alreadyUsed,
                 time: new Date().toISOString()
             };
             
             scanHistory.unshift(entry);
-            if (scanHistory.length > 50) scanHistory.pop();
+            if (scanHistory.length > 100) scanHistory.pop();
             
-            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+            localStorage.setItem('kaizenScanHistory', JSON.stringify(scanHistory));
             updateHistoryDisplay();
             updateStats();
         }
@@ -708,13 +738,13 @@
                 return;
             }
             
-            container.innerHTML = scanHistory.slice(0, 10).map(entry => `
-                <div class="history-item ${entry.valid ? 'valid' : 'invalid'}">
+            container.innerHTML = scanHistory.slice(0, 15).map(entry => `
+                <div class="history-item ${entry.valid ? 'valid' : (entry.alreadyUsed ? 'warning' : 'invalid')}">
                     <div>
                         <div class="history-ref">${entry.ref}</div>
                         <div class="history-time">${new Date(entry.time).toLocaleTimeString()}</div>
                     </div>
-                    <div class="history-status">${entry.valid ? '✓' : '✗'}</div>
+                    <div class="history-status">${entry.valid ? '✓' : (entry.alreadyUsed ? '⚠' : '✗')}</div>
                 </div>
             `).join('');
         }
@@ -741,15 +771,11 @@
             }
             
             checkedIn.push(ref);
-            localStorage.setItem('checkedIn', JSON.stringify(checkedIn));
+            localStorage.setItem('kaizenCheckedIn', JSON.stringify(checkedIn));
             
-            alert('✓ Checked in successfully!\n\nReference: ' + ref);
+            alert('✓ CHECKED IN!\n\nRef: ' + ref + '\nCustomer: ' + (window.currentScanData.n || 'N/A'));
             clearResult();
         }
-        
-        // Initialize
-        updateHistoryDisplay();
-        updateStats();
     </script>
 </body>
 </html>

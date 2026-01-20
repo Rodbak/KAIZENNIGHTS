@@ -443,7 +443,7 @@ function handlePaymentSuccess(reference, amount, quantity) {
     const orderData = {
         ref: reference,
         event: 'KAIZEN NIGHTS',
-        date: '2026-01-25',
+        date: '2026-02-06',
         ticket: selectedTicket,
         ticketName: ticket.name,
         access: ticket.access,
