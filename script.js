@@ -1,47 +1,74 @@
 // ============================================
 // KAIZEN NIGHTS - Ticket Booking System
+// With Paystack Payment Integration
 // ============================================
+
+// ===========================================
+// CONFIGURATION - UPDATE THESE VALUES
+// ===========================================
+const PAYSTACK_PUBLIC_KEY = 'pk_live_1eec1975ed29dad045aacc2721079b66e52cd90d';
+// Get your keys from: https://dashboard.paystack.com/#/settings/developers
 
 // State Management
 let selectedTicket = null;
 let ticketPrice = 0;
-let uploadedFile = null;
+let selectedPaymentMethod = null;
+let paymentReference = null;
 
-// Ticket Data
+// Ticket Data with Access Levels
 const ticketData = {
-    basic: {
-        name: 'CINEMA PASS',
-        nameJP: 'ベーシック',
-        price: 50,
+    movie: {
+        name: 'MOVIE PASS',
+        nameJP: '映画パス',
+        price: 100,
+        access: ['CINEMA', 'SNACKS'],
+        accessLabel: 'Cinema + Snacks',
         features: [
-            'Cinema Room Access',
-            'One Movie Screening',
-            'Comfortable Seating'
+            'Movie Theater Entry',
+            'Full Movie Screening',
+            '1 Free Drink',
+            '1 Free Popcorn'
         ]
     },
-    premium: {
-        name: 'PREMIUM PASS',
-        nameJP: 'プレミアム',
-        price: 80,
+    gaming: {
+        name: 'GAMING PASS',
+        nameJP: 'ゲームパス',
+        price: 100,
+        access: ['GAMING', 'FIFA'],
+        accessLabel: 'Gaming + FIFA',
         features: [
-            'Cinema Room Access',
-            'All Movie Screenings',
-            'Priority Seating',
             'Gaming Zone Access',
-            'Basic Snacks & Drinks'
+            'Multiple Gaming Machines',
+            'FIFA Tournament Entry',
+            'Compete for GHS 1,500'
         ]
     },
-    ultimate: {
-        name: 'VIP PASS',
-        nameJP: 'アルティメット',
-        price: 120,
+    combo: {
+        name: 'COMBO PASS',
+        nameJP: 'コンボパス',
+        price: 170,
+        access: ['CINEMA', 'SNACKS', 'GAMING', 'FIFA', 'AFTERPARTY'],
+        accessLabel: 'FULL ACCESS',
         features: [
-            'Cinema Room Access',
-            'All Movie Screenings',
-            'VIP Front Row Seating',
-            'Unlimited Gaming Zone',
-            'Premium Snacks & Drinks',
-            'Exclusive Kaizen Merch'
+            'Movie Theater Entry',
+            '1 Free Drink + Popcorn',
+            'Gaming Zone Access',
+            'FIFA Tournament Entry',
+            'After Party Access',
+            'SAVE GHS 30!'
+        ]
+    },
+    vendor: {
+        name: 'VENDOR SPOT',
+        nameJP: '出店者',
+        price: 200,
+        access: ['VENDOR'],
+        accessLabel: 'Vendor Area',
+        features: [
+            'Prime Location',
+            'Access to 500+ Attendees',
+            'Table & Setup Space',
+            'Social Media Promotion'
         ]
     }
 };
@@ -97,9 +124,20 @@ function resetCheckout() {
     document.getElementById('customerForm').reset();
     document.getElementById('quantity').value = '1';
     
-    // Reset upload
-    removeFile();
-    document.getElementById('transactionRef').value = '';
+    // Reset payment method selection
+    selectedPaymentMethod = null;
+    document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    document.getElementById('momoNumberInput').classList.add('hidden');
+    
+    // Reset pay button
+    const payBtn = document.getElementById('payNowBtn');
+    payBtn.disabled = true;
+    payBtn.querySelector('.btn-text').textContent = 'SELECT A PAYMENT METHOD';
+    
+    // Reset reference
+    paymentReference = null;
 }
 
 // Update Total
@@ -111,15 +149,44 @@ function updateTotal() {
     document.getElementById('paymentAmount').textContent = `GHS ${total}`;
 }
 
+// Select Payment Method
+function selectPaymentMethod(method) {
+    selectedPaymentMethod = method;
+    
+    // Update UI
+    document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+    
+    // Show/hide MoMo phone input
+    const momoInput = document.getElementById('momoNumberInput');
+    if (method === 'momo') {
+        momoInput.classList.remove('hidden');
+        // Pre-fill with customer phone if available
+        const customerPhone = document.getElementById('phone').value;
+        if (customerPhone) {
+            document.getElementById('momoPhone').value = customerPhone.replace(/\D/g, '').slice(-10);
+        }
+    } else {
+        momoInput.classList.add('hidden');
+    }
+    
+    // Update button
+    const payBtn = document.getElementById('payNowBtn');
+    payBtn.disabled = false;
+    if (method === 'momo') {
+        payBtn.querySelector('.btn-text').textContent = 'PAY WITH MOBILE MONEY';
+    } else {
+        payBtn.querySelector('.btn-text').textContent = 'PAY WITH CARD';
+    }
+}
+
 // Navigate to Step
 function goToStep(stepNumber) {
     // Validate current step before proceeding
     if (stepNumber === 2) {
         if (!validateStep1()) return;
-    }
-    
-    if (stepNumber === 3) {
-        // Nothing special needed
     }
     
     // Update steps visibility
@@ -162,14 +229,321 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
+// Generate unique reference
+function generateReference() {
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).substring(2, 8);
+    return `KZN-${timestamp}-${random}`.toUpperCase();
+}
+
+// ===========================================
+// PAYSTACK PAYMENT INTEGRATION
+// ===========================================
+
+function initiatePayment() {
+    if (!selectedPaymentMethod) {
+        showError('Please select a payment method');
+        return;
+    }
+    
+    // Validate MoMo phone if needed
+    if (selectedPaymentMethod === 'momo') {
+        const momoPhone = document.getElementById('momoPhone').value.replace(/\D/g, '');
+        if (!momoPhone || momoPhone.length !== 10) {
+            showError('Please enter a valid 10-digit mobile money number');
+            return;
+        }
+    }
+    
+    // Get customer details
+    const customerEmail = document.getElementById('email').value.trim();
+    const customerPhone = document.getElementById('phone').value.trim();
+    const customerName = document.getElementById('fullName').value.trim();
+    const quantity = parseInt(document.getElementById('quantity').value);
+    const totalAmount = ticketPrice * quantity;
+    
+    // Generate reference
+    paymentReference = generateReference();
+    
+    // Show loading state
+    const payBtn = document.getElementById('payNowBtn');
+    payBtn.disabled = true;
+    payBtn.querySelector('.btn-text').classList.add('hidden');
+    payBtn.querySelector('.btn-loader').classList.remove('hidden');
+    
+    if (selectedPaymentMethod === 'card') {
+        // Card payment via Paystack popup
+        initiateCardPayment(customerEmail, customerPhone, customerName, totalAmount, quantity);
+    } else {
+        // Mobile Money payment
+        initiateMoMoPayment(customerEmail, customerPhone, customerName, totalAmount, quantity);
+    }
+}
+
+// Card Payment with Paystack Popup
+function initiateCardPayment(email, phone, name, amount, quantity) {
+    const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: email,
+        amount: amount * 100, // Paystack uses pesewas (amount in smallest currency unit)
+        currency: 'GHS',
+        ref: paymentReference,
+        metadata: {
+            custom_fields: [
+                {
+                    display_name: "Customer Name",
+                    variable_name: "customer_name",
+                    value: name
+                },
+                {
+                    display_name: "Phone Number",
+                    variable_name: "phone_number",
+                    value: phone
+                },
+                {
+                    display_name: "Ticket Type",
+                    variable_name: "ticket_type",
+                    value: ticketData[selectedTicket].name
+                },
+                {
+                    display_name: "Quantity",
+                    variable_name: "quantity",
+                    value: quantity.toString()
+                }
+            ]
+        },
+        callback: function(response) {
+            // Payment successful
+            console.log('Payment successful:', response);
+            handlePaymentSuccess(response.reference, amount, quantity);
+        },
+        onClose: function() {
+            // User closed popup
+            resetPayButton();
+            showError('Payment cancelled. Please try again.');
+        }
+    });
+    
+    handler.openIframe();
+}
+
+// Mobile Money Payment with Paystack
+function initiateMoMoPayment(email, phone, name, amount, quantity) {
+    const momoPhone = document.getElementById('momoPhone').value.replace(/\D/g, '');
+    const network = document.getElementById('momoNetwork').value;
+    
+    // Map network to Paystack provider codes
+    const providerMap = {
+        'mtn': 'mtn',
+        'vod': 'vod',
+        'tgo': 'tgo'
+    };
+    
+    // For MoMo, we'll use Paystack's charge API
+    // Note: In production, this should go through your backend
+    // Here we'll use Paystack popup with mobile_money channel
+    
+    const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: email,
+        amount: amount * 100,
+        currency: 'GHS',
+        ref: paymentReference,
+        channels: ['mobile_money'],
+        metadata: {
+            custom_fields: [
+                {
+                    display_name: "Customer Name",
+                    variable_name: "customer_name",
+                    value: name
+                },
+                {
+                    display_name: "MoMo Number",
+                    variable_name: "momo_number",
+                    value: momoPhone
+                },
+                {
+                    display_name: "Network",
+                    variable_name: "network",
+                    value: network.toUpperCase()
+                },
+                {
+                    display_name: "Ticket Type",
+                    variable_name: "ticket_type",
+                    value: ticketData[selectedTicket].name
+                },
+                {
+                    display_name: "Quantity",
+                    variable_name: "quantity",
+                    value: quantity.toString()
+                }
+            ]
+        },
+        callback: function(response) {
+            console.log('MoMo Payment successful:', response);
+            handlePaymentSuccess(response.reference, amount, quantity);
+        },
+        onClose: function() {
+            resetPayButton();
+            showError('Payment cancelled. Please try again.');
+        }
+    });
+    
+    handler.openIframe();
+    
+    // Alternative: Show the MoMo waiting screen
+    // This is for when you implement direct MoMo charge via backend
+    // showMoMoWaitingScreen(momoPhone, amount);
+}
+
+// Show MoMo waiting screen (for direct charge flow)
+function showMoMoWaitingScreen(phone, amount) {
+    document.getElementById('promptPhone').textContent = formatPhoneDisplay(phone);
+    document.getElementById('processingAmount').textContent = `GHS ${amount}`;
+    goToStep(3);
+    resetPayButton();
+}
+
+// Format phone for display
+function formatPhoneDisplay(phone) {
+    if (phone.length === 10) {
+        return `${phone.slice(0,3)} ${phone.slice(3,6)} ${phone.slice(6)}`;
+    }
+    return phone;
+}
+
+// Check payment status (for MoMo direct charge)
+function checkPaymentStatus() {
+    // In production, this would call your backend to verify payment
+    showSuccess('Checking payment status...');
+    
+    // Simulate checking - in real implementation, call your backend
+    setTimeout(() => {
+        // This would be based on actual payment verification
+        showError('Still waiting for payment confirmation. Please ensure you entered your PIN.');
+    }, 2000);
+}
+
+// Handle successful payment
+function handlePaymentSuccess(reference, amount, quantity) {
+    const ticket = ticketData[selectedTicket];
+    
+    // Update receipt
+    document.getElementById('receiptTicket').textContent = ticket.name;
+    document.getElementById('receiptQty').textContent = quantity;
+    document.getElementById('receiptTotal').textContent = `GHS ${amount}`;
+    document.getElementById('receiptRef').textContent = reference;
+    document.getElementById('receiptAccess').textContent = ticket.accessLabel;
+    
+    // Update confirmation details
+    document.getElementById('confirmPhone').textContent = document.getElementById('phone').value;
+    document.getElementById('confirmEmail').textContent = document.getElementById('email').value;
+    
+    // Create ticket data for QR code
+    const orderData = {
+        ref: reference,
+        event: 'KAIZEN NIGHTS',
+        date: '2026-01-25',
+        ticket: selectedTicket,
+        ticketName: ticket.name,
+        access: ticket.access,
+        qty: quantity,
+        total: amount,
+        customer: {
+            name: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim()
+        },
+        paid: new Date().toISOString(),
+        valid: true
+    };
+    
+    // Generate QR Code with ticket data
+    generateTicketQR(orderData);
+    
+    // Store order locally
+    const orders = JSON.parse(localStorage.getItem('kaizenOrders') || '[]');
+    orders.push(orderData);
+    localStorage.setItem('kaizenOrders', JSON.stringify(orders));
+    
+    console.log('Order saved:', orderData);
+    
+    // Show success step
+    goToStep(4);
+    resetPayButton();
+    
+    // Show success toast
+    showSuccess('Payment successful! 🎉');
+}
+
+// Generate QR Code for ticket verification
+function generateTicketQR(orderData) {
+    const qrContainer = document.getElementById('qrCode');
+    qrContainer.innerHTML = ''; // Clear previous QR code
+    
+    // Create QR data string - contains all verification info
+    const qrData = JSON.stringify({
+        r: orderData.ref,           // Reference
+        t: orderData.ticket,        // Ticket type
+        a: orderData.access,        // Access levels
+        q: orderData.qty,           // Quantity
+        n: orderData.customer.name, // Customer name
+        p: orderData.customer.phone,// Phone
+        d: orderData.paid           // Payment timestamp
+    });
+    
+    // Generate QR Code using the library
+    if (typeof QRCode !== 'undefined') {
+        QRCode.toCanvas(qrData, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF'
+            }
+        }, function(error, canvas) {
+            if (error) {
+                console.error('QR Code generation error:', error);
+                // Fallback to text-based display
+                qrContainer.innerHTML = `<div style="padding:20px;text-align:center;font-family:monospace;font-size:12px;background:#fff;color:#000;word-break:break-all;">${orderData.ref}</div>`;
+            } else {
+                qrContainer.appendChild(canvas);
+            }
+        });
+    } else {
+        // Fallback if QRCode library not loaded
+        qrContainer.innerHTML = `<div style="padding:20px;text-align:center;font-family:monospace;font-size:14px;background:#fff;color:#000;"><strong>${orderData.ref}</strong><br><small>Ref Code</small></div>`;
+    }
+}
+
+// Reset pay button state
+function resetPayButton() {
+    const payBtn = document.getElementById('payNowBtn');
+    payBtn.disabled = false;
+    payBtn.querySelector('.btn-text').classList.remove('hidden');
+    payBtn.querySelector('.btn-loader').classList.add('hidden');
+}
+
 // Show Error
 function showError(message) {
-    // Create error toast
+    showToast(message, 'error');
+}
+
+// Show Success
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+// Toast notification
+function showToast(message, type = 'error') {
+    // Create toast
     const toast = document.createElement('div');
-    toast.className = 'error-toast';
+    toast.className = `toast toast-${type}`;
+    
+    const icon = type === 'success' ? '✓' : '⚠';
     toast.innerHTML = `
-        <span class="error-icon">⚠</span>
-        <span class="error-message">${message}</span>
+        <span class="toast-icon">${icon}</span>
+        <span class="toast-message">${message}</span>
     `;
     
     // Add styles if not exists
@@ -177,12 +551,11 @@ function showError(message) {
         const styles = document.createElement('style');
         styles.id = 'toast-styles';
         styles.textContent = `
-            .error-toast {
+            .toast {
                 position: fixed;
                 bottom: 2rem;
                 left: 50%;
                 transform: translateX(-50%);
-                background: #E71C23;
                 color: white;
                 padding: 1rem 1.5rem;
                 display: flex;
@@ -191,11 +564,18 @@ function showError(message) {
                 z-index: 3000;
                 animation: toastSlide 0.3s ease-out;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border-radius: 4px;
             }
-            .error-icon {
+            .toast-error {
+                background: #E71C23;
+            }
+            .toast-success {
+                background: #22c55e;
+            }
+            .toast-icon {
                 font-size: 1.2rem;
             }
-            .error-message {
+            .toast-message {
                 font-size: 0.95rem;
             }
             @keyframes toastSlide {
@@ -219,110 +599,6 @@ function showError(message) {
         toast.style.animation = 'toastSlide 0.3s ease-out reverse';
         setTimeout(() => toast.remove(), 300);
     }, 3000);
-}
-
-// Handle File Upload
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    
-    if (!file) return;
-    
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-        showError('File is too large. Maximum size is 5MB');
-        return;
-    }
-    
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
-    if (!validTypes.includes(file.type)) {
-        showError('Invalid file type. Please upload an image or PDF');
-        return;
-    }
-    
-    uploadedFile = file;
-    
-    // Show preview
-    const preview = document.getElementById('uploadPreview');
-    const previewImage = document.getElementById('previewImage');
-    const fileName = document.getElementById('fileName');
-    
-    preview.classList.remove('hidden');
-    fileName.textContent = file.name;
-    
-    if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            previewImage.src = e.target.result;
-            previewImage.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    } else {
-        previewImage.style.display = 'none';
-    }
-    
-    // Hide upload area
-    document.getElementById('uploadArea').style.display = 'none';
-}
-
-// Remove File
-function removeFile() {
-    uploadedFile = null;
-    document.getElementById('proofUpload').value = '';
-    document.getElementById('uploadPreview').classList.add('hidden');
-    document.getElementById('uploadArea').style.display = 'block';
-    document.getElementById('previewImage').src = '';
-}
-
-// Submit Order
-function submitOrder() {
-    // Validate file upload
-    if (!uploadedFile) {
-        showError('Please upload your payment proof');
-        return;
-    }
-    
-    // Disable submit button
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'SUBMITTING...';
-    
-    // Collect order data
-    const orderData = {
-        ticket: selectedTicket,
-        ticketName: ticketData[selectedTicket].name,
-        price: ticketPrice,
-        quantity: parseInt(document.getElementById('quantity').value),
-        total: ticketPrice * parseInt(document.getElementById('quantity').value),
-        customer: {
-            name: document.getElementById('fullName').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim()
-        },
-        transactionRef: document.getElementById('transactionRef').value.trim(),
-        proofFileName: uploadedFile.name,
-        submittedAt: new Date().toISOString()
-    };
-    
-    // Store order in localStorage (for demo purposes)
-    const orders = JSON.parse(localStorage.getItem('kaizenOrders') || '[]');
-    orders.push(orderData);
-    localStorage.setItem('kaizenOrders', JSON.stringify(orders));
-    
-    // Simulate submission delay
-    setTimeout(() => {
-        // Update confirmation phone
-        document.getElementById('confirmPhone').textContent = orderData.customer.phone;
-        
-        // Go to confirmation step
-        goToStep(4);
-        
-        // Reset button
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'SUBMIT FOR VERIFICATION';
-        
-        console.log('Order submitted:', orderData);
-    }, 1500);
 }
 
 // Close modal on outside click
@@ -397,4 +673,4 @@ document.getElementById('quantity')?.addEventListener('keydown', (e) => {
 
 // Console message for developers
 console.log('%c🎬 KAIZEN NIGHTS', 'font-size: 24px; font-weight: bold; color: #E71C23;');
-console.log('%cWelcome to Kaizen Nights Booking System!', 'font-size: 12px; color: #888;');
+console.log('%cPowered by Paystack Payment Gateway', 'font-size: 12px; color: #888;');

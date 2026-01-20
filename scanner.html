@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIZEN NIGHTS | Ticket Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-red: #E71C23;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-white: #ffffff;
+            --text-gray: #888;
+            --success-green: #22c55e;
+            --warning-yellow: #eab308;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-white);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-red) 150%);
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid var(--primary-red);
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+        
+        .header p {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-top: 0.25rem;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .scanner-box {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        #reader {
+            width: 100%;
+        }
+        
+        #reader video {
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .scanner-controls {
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--primary-red);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Manual Entry */
+        .manual-entry {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .manual-entry h3 {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: var(--dark-bg);
+            color: white;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+        }
+        
+        /* Result Display */
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .result-card.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result-header {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .result-header.valid {
+            background: linear-gradient(135deg, var(--success-green) 0%, #16a34a 100%);
+        }
+        
+        .result-header.invalid {
+            background: linear-gradient(135deg, var(--primary-red) 0%, #b91c1c 100%);
+        }
+        
+        .result-header.warning {
+            background: linear-gradient(135deg, var(--warning-yellow) 0%, #ca8a04 100%);
+        }
+        
+        .result-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-status {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+        
+        .result-body {
+            padding: 1.5rem;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .access-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        
+        .access-badge {
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-red);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .access-badge.cinema { background: #7c3aed; }
+        .access-badge.gaming { background: #2563eb; }
+        .access-badge.fifa { background: #16a34a; }
+        .access-badge.afterparty { background: #ec4899; }
+        .access-badge.snacks { background: #f59e0b; }
+        .access-badge.vendor { background: #06b6d4; }
+        
+        .result-actions {
+            padding: 1rem 1.5rem 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Scan History */
+        .history-section {
+            margin-top: 2rem;
+        }
+        
+        .history-section h3 {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .history-item.valid {
+            border-left: 3px solid var(--success-green);
+        }
+        
+        .history-item.invalid {
+            border-left: 3px solid var(--primary-red);
+        }
+        
+        .history-ref {
+            font-family: monospace;
+            font-weight: 600;
+        }
+        
+        .history-time {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+        
+        .history-status {
+            font-size: 1.2rem;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .instructions h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--primary-red);
+        }
+        
+        .instructions ol {
+            padding-left: 1.25rem;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🎫 KAIZEN NIGHTS</h1>
+        <p>Ticket Scanner & Verification</p>
+    </header>
+    
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalScans">0</div>
+                <div class="stat-label">Total Scans</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="validScans">0</div>
+                <div class="stat-label">Valid</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="invalidScans">0</div>
+                <div class="stat-label">Invalid</div>
+            </div>
+        </div>
+        
+        <!-- Scanner -->
+        <div class="scanner-box">
+            <div id="reader"></div>
+            <div class="scanner-controls">
+                <button class="btn btn-primary" id="startBtn" onclick="startScanner()">📷 Start Camera</button>
+                <button class="btn btn-secondary" id="stopBtn" onclick="stopScanner()" disabled>⏹ Stop</button>
+            </div>
+        </div>
+        
+        <!-- Manual Entry -->
+        <div class="manual-entry">
+            <h3>Manual Reference Lookup</h3>
+            <div class="input-group">
+                <input type="text" id="manualRef" placeholder="Enter reference (e.g. KZN-...)" 
+                       onkeypress="if(event.key === 'Enter') lookupReference()">
+                <button class="btn btn-primary" onclick="lookupReference()">🔍</button>
+            </div>
+        </div>
+        
+        <!-- Result Display -->
+        <div class="result-card" id="resultCard">
+            <div class="result-header" id="resultHeader">
+                <div class="result-icon" id="resultIcon">✓</div>
+                <div class="result-status" id="resultStatus">VALID TICKET</div>
+            </div>
+            <div class="result-body">
+                <div class="info-row">
+                    <span class="info-label">Reference</span>
+                    <span class="info-value" id="infoRef">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Ticket Type</span>
+                    <span class="info-value" id="infoTicket">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Customer</span>
+                    <span class="info-value" id="infoCustomer">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Quantity</span>
+                    <span class="info-value" id="infoQty">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Purchase Date</span>
+                    <span class="info-value" id="infoPaid">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Access Areas</span>
+                    <div class="access-badges" id="infoAccess">-</div>
+                </div>
+            </div>
+            <div class="result-actions">
+                <button class="btn btn-secondary" onclick="clearResult()">Clear</button>
+                <button class="btn btn-primary" onclick="markAsUsed()">✓ Check In</button>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>📋 How to Use</h3>
+            <ol>
+                <li>Click "Start Camera" to begin scanning</li>
+                <li>Point camera at customer's QR code</li>
+                <li>Verify the ticket details and access areas</li>
+                <li>Click "Check In" to mark as used</li>
+            </ol>
+        </div>
+        
+        <!-- Scan History -->
+        <div class="history-section">
+            <h3>Recent Scans</h3>
+            <div class="history-list" id="historyList">
+                <p style="color: var(--text-gray); text-align: center; padding: 2rem;">
+                    No scans yet
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let html5QrCode = null;
+        let scanHistory = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+        let checkedIn = JSON.parse(localStorage.getItem('checkedIn') || '[]');
+        
+        // Stats
+        function updateStats() {
+            document.getElementById('totalScans').textContent = scanHistory.length;
+            document.getElementById('validScans').textContent = scanHistory.filter(s => s.valid).length;
+            document.getElementById('invalidScans').textContent = scanHistory.filter(s => !s.valid).length;
+        }
+        
+        // Start Scanner
+        function startScanner() {
+            html5QrCode = new Html5Qrcode("reader");
+            
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                onScanSuccess,
+                onScanError
+            ).then(() => {
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+            }).catch(err => {
+                alert('Camera error: ' + err);
+            });
+        }
+        
+        // Stop Scanner
+        function stopScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                });
+            }
+        }
+        
+        // On successful scan
+        function onScanSuccess(decodedText, decodedResult) {
+            // Vibrate if supported
+            if (navigator.vibrate) navigator.vibrate(200);
+            
+            // Parse QR data
+            try {
+                const data = JSON.parse(decodedText);
+                displayResult(data, true);
+            } catch (e) {
+                // Not JSON, might be just a reference
+                lookupByRef(decodedText);
+            }
+        }
+        
+        function onScanError(error) {
+            // Ignore scan errors (no QR found)
+        }
+        
+        // Lookup by reference
+        function lookupReference() {
+            const ref = document.getElementById('manualRef').value.trim().toUpperCase();
+            if (!ref) {
+                alert('Please enter a reference code');
+                return;
+            }
+            lookupByRef(ref);
+        }
+        
+        function lookupByRef(ref) {
+            // Check local storage for orders
+            const orders = JSON.parse(localStorage.getItem('kaizenOrders') || '[]');
+            const order = orders.find(o => o.ref === ref);
+            
+            if (order) {
+                displayResult({
+                    r: order.ref,
+                    t: order.ticket,
+                    a: order.access,
+                    q: order.qty,
+                    n: order.customer.name,
+                    p: order.customer.phone,
+                    d: order.paid
+                }, true);
+            } else {
+                displayResult({ r: ref }, false);
+            }
+        }
+        
+        // Display result
+        function displayResult(data, isValid) {
+            const card = document.getElementById('resultCard');
+            const header = document.getElementById('resultHeader');
+            
+            // Check if already checked in
+            const alreadyCheckedIn = checkedIn.includes(data.r);
+            
+            if (!isValid) {
+                header.className = 'result-header invalid';
+                document.getElementById('resultIcon').textContent = '✗';
+                document.getElementById('resultStatus').textContent = 'INVALID TICKET';
+            } else if (alreadyCheckedIn) {
+                header.className = 'result-header warning';
+                document.getElementById('resultIcon').textContent = '⚠';
+                document.getElementById('resultStatus').textContent = 'ALREADY USED';
+            } else {
+                header.className = 'result-header valid';
+                document.getElementById('resultIcon').textContent = '✓';
+                document.getElementById('resultStatus').textContent = 'VALID TICKET';
+            }
+            
+            // Ticket type names
+            const ticketNames = {
+                movie: 'MOVIE PASS',
+                gaming: 'GAMING PASS',
+                combo: 'COMBO PASS',
+                vendor: 'VENDOR SPOT'
+            };
+            
+            // Fill in details
+            document.getElementById('infoRef').textContent = data.r || '-';
+            document.getElementById('infoTicket').textContent = ticketNames[data.t] || data.t || '-';
+            document.getElementById('infoCustomer').textContent = data.n || '-';
+            document.getElementById('infoQty').textContent = data.q || '-';
+            document.getElementById('infoPaid').textContent = data.d ? new Date(data.d).toLocaleString() : '-';
+            
+            // Access badges
+            const accessContainer = document.getElementById('infoAccess');
+            if (data.a && Array.isArray(data.a)) {
+                accessContainer.innerHTML = data.a.map(a => 
+                    `<span class="access-badge ${a.toLowerCase()}">${a}</span>`
+                ).join('');
+            } else {
+                accessContainer.innerHTML = '-';
+            }
+            
+            card.classList.add('show');
+            
+            // Add to history
+            addToHistory(data.r, isValid && !alreadyCheckedIn);
+            
+            // Store current scan data
+            window.currentScanData = data;
+        }
+        
+        // Add to scan history
+        function addToHistory(ref, valid) {
+            const entry = {
+                ref: ref,
+                valid: valid,
+                time: new Date().toISOString()
+            };
+            
+            scanHistory.unshift(entry);
+            if (scanHistory.length > 50) scanHistory.pop();
+            
+            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+            updateHistoryDisplay();
+            updateStats();
+        }
+        
+        // Update history display
+        function updateHistoryDisplay() {
+            const container = document.getElementById('historyList');
+            
+            if (scanHistory.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-gray); text-align: center; padding: 2rem;">No scans yet</p>';
+                return;
+            }
+            
+            container.innerHTML = scanHistory.slice(0, 10).map(entry => `
+                <div class="history-item ${entry.valid ? 'valid' : 'invalid'}">
+                    <div>
+                        <div class="history-ref">${entry.ref}</div>
+                        <div class="history-time">${new Date(entry.time).toLocaleTimeString()}</div>
+                    </div>
+                    <div class="history-status">${entry.valid ? '✓' : '✗'}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Clear result
+        function clearResult() {
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('manualRef').value = '';
+            window.currentScanData = null;
+        }
+        
+        // Mark as used (check in)
+        function markAsUsed() {
+            if (!window.currentScanData || !window.currentScanData.r) {
+                alert('No ticket to check in');
+                return;
+            }
+            
+            const ref = window.currentScanData.r;
+            
+            if (checkedIn.includes(ref)) {
+                alert('This ticket has already been checked in!');
+                return;
+            }
+            
+            checkedIn.push(ref);
+            localStorage.setItem('checkedIn', JSON.stringify(checkedIn));
+            
+            alert('✓ Checked in successfully!\n\nReference: ' + ref);
+            clearResult();
+        }
+        
+        // Initialize
+        updateHistoryDisplay();
+        updateStats();
+    </script>
+</body>
+</html>

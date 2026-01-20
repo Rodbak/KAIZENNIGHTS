@@ -8,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Paystack Payment Gateway -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- QR Code Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
     <!-- Animated Background -->
@@ -26,6 +30,8 @@
             <ul class="nav-links">
                 <li><a href="#home">HOME</a></li>
                 <li><a href="#tickets">TICKETS</a></li>
+                <li><a href="#competition">FIFA</a></li>
+                <li><a href="#vendors">VENDORS</a></li>
                 <li><a href="#about">ABOUT</a></li>
             </ul>
         </div>
@@ -39,10 +45,10 @@
                 <span class="title-main">KAIZEN</span>
                 <span class="title-sub">NIGHTS</span>
             </h1>
-            <p class="hero-tagline">映画の夜 • MOVIE NIGHT EXPERIENCE</p>
+            <p class="hero-tagline">映画の夜 • MOVIE & GAMING EXPERIENCE</p>
             <p class="hero-description">
-                Immerse yourself in an unforgettable anime movie night experience. 
-                Gaming zones, premium snacks, and the ultimate cinema atmosphere await.
+                Experience the ultimate entertainment night! Movie screenings, gaming tournaments, 
+                FIFA competition with GHS 1,500 in prizes, and an epic after party with a famous DJ!
             </p>
             <div class="hero-date">
                 <div class="date-box">
@@ -75,71 +81,109 @@
         </div>
 
         <div class="tickets-container">
-            <!-- Basic Ticket -->
-            <div class="ticket-card" data-ticket="basic">
-                <div class="ticket-ribbon">BASIC</div>
+            <!-- Movie Pass -->
+            <div class="ticket-card" data-ticket="movie">
+                <div class="ticket-ribbon">MOVIE</div>
                 <div class="ticket-header">
-                    <span class="ticket-jp">ベーシック</span>
-                    <h3 class="ticket-name">CINEMA PASS</h3>
+                    <span class="ticket-jp">映画パス</span>
+                    <h3 class="ticket-name">MOVIE PASS</h3>
                 </div>
                 <div class="ticket-price">
                     <span class="currency">GHS</span>
-                    <span class="amount">50</span>
+                    <span class="amount">100</span>
                 </div>
                 <ul class="ticket-features">
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        Cinema Room Access
+                        Movie Theater Entry
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        One Movie Screening
+                        Full Movie Screening
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        Comfortable Seating
+                        1 Free Drink
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        1 Free Popcorn
                     </li>
                     <li class="not-included">
                         <span class="feature-icon">✗</span>
-                        Gaming Zone
+                        Gaming Zone Access
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        After Party Access
+                    </li>
+                </ul>
+                <button class="ticket-btn" onclick="selectTicket('movie', 100)">
+                    SELECT PASS
+                </button>
+            </div>
+
+            <!-- Gaming Pass -->
+            <div class="ticket-card" data-ticket="gaming">
+                <div class="ticket-ribbon">GAMING</div>
+                <div class="ticket-header">
+                    <span class="ticket-jp">ゲームパス</span>
+                    <h3 class="ticket-name">GAMING PASS</h3>
+                </div>
+                <div class="ticket-price">
+                    <span class="currency">GHS</span>
+                    <span class="amount">100</span>
+                </div>
+                <ul class="ticket-features">
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Gaming Zone Access
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Multiple Gaming Machines
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        FIFA Tournament Entry
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Compete for GHS 1,500
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Movie Theater Access
                     </li>
                     <li class="not-included">
                         <span class="feature-icon">✗</span>
                         Snacks & Drinks
                     </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Exclusive Merch
-                    </li>
                 </ul>
-                <button class="ticket-btn" onclick="selectTicket('basic', 50)">
+                <button class="ticket-btn" onclick="selectTicket('gaming', 100)">
                     SELECT PASS
                 </button>
             </div>
 
-            <!-- Premium Ticket -->
-            <div class="ticket-card featured" data-ticket="premium">
-                <div class="ticket-ribbon">POPULAR</div>
+            <!-- Combo Pass -->
+            <div class="ticket-card featured" data-ticket="combo">
+                <div class="ticket-ribbon">BEST VALUE</div>
                 <div class="ticket-header">
-                    <span class="ticket-jp">プレミアム</span>
-                    <h3 class="ticket-name">PREMIUM PASS</h3>
+                    <span class="ticket-jp">コンボパス</span>
+                    <h3 class="ticket-name">COMBO PASS</h3>
                 </div>
                 <div class="ticket-price">
                     <span class="currency">GHS</span>
-                    <span class="amount">80</span>
+                    <span class="amount">170</span>
                 </div>
                 <ul class="ticket-features">
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        Cinema Room Access
+                        Movie Theater Entry
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        All Movie Screenings
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Priority Seating
+                        1 Free Drink + Popcorn
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
@@ -147,59 +191,156 @@
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        Basic Snacks & Drinks
+                        FIFA Tournament Entry
                     </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Exclusive Merch
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        After Party Access
+                    </li>
+                    <li class="included highlight-feature">
+                        <span class="feature-icon">★</span>
+                        SAVE GHS 30!
                     </li>
                 </ul>
-                <button class="ticket-btn" onclick="selectTicket('premium', 80)">
+                <button class="ticket-btn" onclick="selectTicket('combo', 170)">
                     SELECT PASS
                 </button>
             </div>
+        </div>
+    </section>
 
-            <!-- Ultimate Ticket -->
-            <div class="ticket-card ultimate" data-ticket="ultimate">
-                <div class="ticket-ribbon">ULTIMATE</div>
-                <div class="ticket-header">
-                    <span class="ticket-jp">アルティメット</span>
-                    <h3 class="ticket-name">VIP PASS</h3>
+    <!-- FIFA Competition Section -->
+    <section id="competition" class="competition-section">
+        <div class="section-header">
+            <span class="section-jp">FIFA大会</span>
+            <h2 class="section-title">FIFA COMPETITION</h2>
+            <p class="section-subtitle">Battle for glory and cash prizes!</p>
+        </div>
+        
+        <div class="competition-content">
+            <div class="trophy-display">
+                <div class="trophy-icon">🏆</div>
+                <div class="prize-pool">
+                    <span class="prize-label">TOTAL PRIZE POOL</span>
+                    <span class="prize-amount">GHS 1,500</span>
                 </div>
-                <div class="ticket-price">
+            </div>
+            
+            <div class="prizes-container">
+                <div class="prize-card first-place">
+                    <div class="place-badge">🥇</div>
+                    <h3>1ST PLACE</h3>
+                    <div class="prize-value">GHS 1,000</div>
+                    <p>+ Trophy + Bragging Rights</p>
+                </div>
+                <div class="prize-card second-place">
+                    <div class="place-badge">🥈</div>
+                    <h3>2ND PLACE</h3>
+                    <div class="prize-value">GHS 500</div>
+                    <p>+ Medal</p>
+                </div>
+            </div>
+            
+            <div class="competition-info">
+                <div class="info-card">
+                    <span class="info-icon">🎮</span>
+                    <h4>GAME</h4>
+                    <p>EA FC 24 / FIFA 24</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-icon">👥</span>
+                    <h4>FORMAT</h4>
+                    <p>Knockout Tournament</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-icon">🎟️</span>
+                    <h4>ENTRY</h4>
+                    <p>Gaming or Combo Pass</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vendor Section -->
+    <section id="vendors" class="vendors-section">
+        <div class="section-header">
+            <span class="section-jp">出店者</span>
+            <h2 class="section-title">VENDOR SPOTS</h2>
+            <p class="section-subtitle">Sell your food & goods at Kaizen Nights!</p>
+        </div>
+        
+        <div class="vendor-content">
+            <div class="vendor-card">
+                <div class="vendor-icon">🏪</div>
+                <h3>VENDOR SPOT</h3>
+                <div class="vendor-price">
                     <span class="currency">GHS</span>
-                    <span class="amount">120</span>
+                    <span class="amount">200</span>
                 </div>
-                <ul class="ticket-features">
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Cinema Room Access
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        All Movie Screenings
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        VIP Front Row Seating
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Unlimited Gaming Zone
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Premium Snacks & Drinks
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Exclusive Kaizen Merch
-                    </li>
+                <ul class="vendor-features">
+                    <li>✓ Prime location at the venue</li>
+                    <li>✓ Access to 500+ attendees</li>
+                    <li>✓ Table & setup space provided</li>
+                    <li>✓ Promotion on our social media</li>
+                    <li>✓ Perfect for food, drinks, merch</li>
                 </ul>
-                <button class="ticket-btn" onclick="selectTicket('ultimate', 120)">
-                    SELECT PASS
+                <button class="ticket-btn" onclick="selectTicket('vendor', 200)">
+                    BOOK YOUR SPOT
                 </button>
             </div>
+            
+            <div class="vendor-info">
+                <h3>IDEAL FOR:</h3>
+                <div class="vendor-types">
+                    <span class="vendor-type">🍔 Food Vendors</span>
+                    <span class="vendor-type">🥤 Drink Sellers</span>
+                    <span class="vendor-type">👕 Merch Sellers</span>
+                    <span class="vendor-type">🎨 Artists</span>
+                    <span class="vendor-type">📱 Tech Gadgets</span>
+                    <span class="vendor-type">🎮 Gaming Accessories</span>
+                </div>
+                <p class="vendor-note">
+                    <strong>Limited spots available!</strong> Secure your spot early to reach our 
+                    engaged audience of movie lovers and gamers.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- After Party Section -->
+    <section id="afterparty" class="afterparty-section">
+        <div class="afterparty-content">
+            <div class="afterparty-badge">🎉 AFTER THE COMPETITION</div>
+            <h2 class="afterparty-title">AFTER PARTY</h2>
+            <p class="afterparty-tagline">The night doesn't end when the games do!</p>
+            
+            <div class="party-features">
+                <div class="party-feature">
+                    <span class="party-icon">🎧</span>
+                    <h3>FAMOUS DJ</h3>
+                    <p>Live DJ set with the hottest tracks</p>
+                </div>
+                <div class="party-feature">
+                    <span class="party-icon">🎤</span>
+                    <h3>HYPE MC</h3>
+                    <p>Keeping the energy high all night</p>
+                </div>
+                <div class="party-feature">
+                    <span class="party-icon">💃</span>
+                    <h3>DANCE FLOOR</h3>
+                    <p>Dance the night away</p>
+                </div>
+            </div>
+            
+            <p class="afterparty-note">
+                <strong>Access included with COMBO PASS!</strong> 
+                Get the full Kaizen Nights experience.
+            </p>
+            
+            <a href="#tickets" class="cta-button afterparty-cta">
+                <span class="cta-text">GET YOUR COMBO PASS</span>
+                <span class="cta-jp">コンボパスを購入</span>
+            </a>
         </div>
     </section>
 
@@ -219,20 +360,6 @@
                     with premium facilities, delicious snacks, and a community of 
                     like-minded enthusiasts.
                 </p>
-                <div class="about-stats">
-                    <div class="stat">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">Happy Attendees</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">12</span>
-                        <span class="stat-label">Events Hosted</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Satisfaction</span>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -291,73 +418,123 @@
                 </form>
             </div>
 
-            <!-- Step 2: Payment -->
+            <!-- Step 2: Payment Method Selection -->
             <div id="step2" class="checkout-step">
                 <div class="step-header">
                     <span class="step-jp">ステップ 2</span>
-                    <h3>MOBILE MONEY PAYMENT</h3>
+                    <h3>CHOOSE PAYMENT METHOD</h3>
                 </div>
-                <div class="payment-info">
-                    <div class="momo-details">
-                        <div class="momo-icon">📱</div>
-                        <h4>Send Payment To:</h4>
-                        <div class="momo-number">
-                            <span class="network">MTN MoMo</span>
-                            <span class="number">024 XXX XXXX</span>
-                        </div>
-                        <div class="momo-name">KAIZEN NIGHTS AGENCY</div>
-                        <div class="payment-amount">
-                            Amount: <strong id="paymentAmount">GHS 0</strong>
-                        </div>
-                    </div>
-                    <div class="payment-instructions">
-                        <h4>Instructions:</h4>
-                        <ol>
-                            <li>Dial *170# on your phone</li>
-                            <li>Select "Transfer Money"</li>
-                            <li>Enter the number above</li>
-                            <li>Enter the exact amount shown</li>
-                            <li>Confirm the transaction</li>
-                            <li>Take a screenshot of confirmation</li>
-                        </ol>
+                
+                <div class="payment-summary">
+                    <div class="summary-total">
+                        <span>Total to Pay:</span>
+                        <span id="paymentAmount" class="total-amount">GHS 0</span>
                     </div>
                 </div>
-                <button type="button" class="checkout-btn" onclick="goToStep(3)">
-                    I'VE MADE THE PAYMENT
+
+                <div class="payment-methods">
+                    <!-- Mobile Money Option -->
+                    <div class="payment-option" data-method="momo" onclick="selectPaymentMethod('momo')">
+                        <div class="payment-option-header">
+                            <div class="payment-icon momo-icon-box">📱</div>
+                            <div class="payment-option-info">
+                                <h4>Mobile Money</h4>
+                                <p>MTN MoMo, Vodafone Cash, AirtelTigo Money</p>
+                            </div>
+                            <div class="payment-radio">
+                                <span class="radio-dot"></span>
+                            </div>
+                        </div>
+                        <div class="payment-option-details">
+                            <p class="momo-note">
+                                💡 A payment prompt will be sent directly to your phone number. 
+                                Just enter your PIN to complete payment!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card Payment Option -->
+                    <div class="payment-option" data-method="card" onclick="selectPaymentMethod('card')">
+                        <div class="payment-option-header">
+                            <div class="payment-icon card-icon-box">💳</div>
+                            <div class="payment-option-info">
+                                <h4>Visa / Mastercard</h4>
+                                <p>Credit or Debit Card</p>
+                            </div>
+                            <div class="payment-radio">
+                                <span class="radio-dot"></span>
+                            </div>
+                        </div>
+                        <div class="payment-option-details">
+                            <div class="card-logos">
+                                <span class="card-logo visa">VISA</span>
+                                <span class="card-logo mastercard">MC</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MoMo Number Input (shown when MoMo is selected) -->
+                <div id="momoNumberInput" class="momo-number-input hidden">
+                    <div class="form-group">
+                        <label for="momoPhone">Mobile Money Number</label>
+                        <div class="phone-input-wrapper">
+                            <select id="momoNetwork" class="network-select">
+                                <option value="mtn">MTN</option>
+                                <option value="vod">Vodafone</option>
+                                <option value="tgo">AirtelTigo</option>
+                            </select>
+                            <input type="tel" id="momoPhone" placeholder="024 XXX XXXX" 
+                                   pattern="[0-9]{10}" maxlength="10">
+                        </div>
+                        <small class="input-hint">Enter the number to receive the payment prompt</small>
+                    </div>
+                </div>
+
+                <button type="button" class="checkout-btn" id="payNowBtn" onclick="initiatePayment()" disabled>
+                    <span class="btn-text">SELECT A PAYMENT METHOD</span>
+                    <span class="btn-loader hidden">
+                        <span class="loader-dot"></span>
+                        <span class="loader-dot"></span>
+                        <span class="loader-dot"></span>
+                    </span>
                 </button>
                 <button type="button" class="back-btn" onclick="goToStep(1)">
                     ← Go Back
                 </button>
             </div>
 
-            <!-- Step 3: Upload Proof -->
+            <!-- Step 3: Processing (for MoMo) -->
             <div id="step3" class="checkout-step">
                 <div class="step-header">
-                    <span class="step-jp">ステップ 3</span>
-                    <h3>UPLOAD PAYMENT PROOF</h3>
+                    <span class="step-jp">処理中</span>
+                    <h3>COMPLETE YOUR PAYMENT</h3>
                 </div>
-                <div class="upload-section">
-                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('proofUpload').click()">
-                        <div class="upload-icon">📤</div>
-                        <p>Click to upload screenshot</p>
-                        <span class="upload-hint">PNG, JPG or PDF (Max 5MB)</span>
+                <div class="processing-content">
+                    <div class="phone-animation">
+                        <div class="phone-icon">📱</div>
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring delay-1"></div>
+                        <div class="pulse-ring delay-2"></div>
                     </div>
-                    <input type="file" id="proofUpload" accept="image/*,.pdf" hidden onchange="handleFileUpload(event)">
-                    <div id="uploadPreview" class="upload-preview hidden">
-                        <img id="previewImage" src="" alt="Preview">
-                        <span id="fileName"></span>
-                        <button class="remove-file" onclick="removeFile()">✕ Remove</button>
+                    <h4>Payment Prompt Sent!</h4>
+                    <p class="processing-text">
+                        Check your phone <strong id="promptPhone">024 XXX XXXX</strong>
+                    </p>
+                    <p class="processing-instruction">
+                        Enter your Mobile Money PIN to authorize the payment of 
+                        <strong id="processingAmount">GHS 0</strong>
+                    </p>
+                    <div class="waiting-timer">
+                        <span class="timer-icon">⏱️</span>
+                        <span id="waitTimer">Waiting for confirmation...</span>
                     </div>
                 </div>
-                <div class="reference-input">
-                    <label for="transactionRef">Transaction Reference (Optional)</label>
-                    <input type="text" id="transactionRef" placeholder="e.g., MOMO123456789">
-                </div>
-                <button type="button" class="checkout-btn" onclick="submitOrder()" id="submitBtn">
-                    SUBMIT FOR VERIFICATION
+                <button type="button" class="checkout-btn secondary" onclick="checkPaymentStatus()">
+                    I'VE ENTERED MY PIN
                 </button>
                 <button type="button" class="back-btn" onclick="goToStep(2)">
-                    ← Go Back
+                    ← Try Different Method
                 </button>
             </div>
 
@@ -366,18 +543,64 @@
                 <div class="confirmation-content">
                     <div class="success-icon">✓</div>
                     <span class="step-jp">完了</span>
-                    <h3>ORDER SUBMITTED!</h3>
+                    <h3>PAYMENT SUCCESSFUL!</h3>
                     <p class="confirmation-text">
-                        Thank you for your order! We're verifying your payment.
+                        Thank you for your purchase! Your payment has been confirmed.
                     </p>
+                    <!-- QR Code Section -->
+                    <div class="qr-code-section">
+                        <div class="qr-code-container">
+                            <div id="qrCode"></div>
+                        </div>
+                        <p class="qr-instruction">📲 Screenshot this QR code or save your ticket!</p>
+                        <p class="qr-note">Present this at the entrance for verification</p>
+                    </div>
+
+                    <div class="ticket-receipt">
+                        <div class="receipt-header">
+                            <span class="receipt-icon">🎟️</span>
+                            <span>YOUR TICKET</span>
+                        </div>
+                        <div class="receipt-details">
+                            <div class="receipt-row">
+                                <span>Event:</span>
+                                <span>KAIZEN NIGHTS</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Date:</span>
+                                <span>JAN 25, 2026</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Pass:</span>
+                                <span id="receiptTicket">-</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Quantity:</span>
+                                <span id="receiptQty">-</span>
+                            </div>
+                            <div class="receipt-row total">
+                                <span>Total Paid:</span>
+                                <span id="receiptTotal">GHS 0</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Reference:</span>
+                                <span id="receiptRef" class="ref-code">-</span>
+                            </div>
+                            <div class="receipt-row access-row">
+                                <span>Access:</span>
+                                <span id="receiptAccess" class="access-badge">-</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="confirmation-details">
-                        <p>Your ticket will be sent to your WhatsApp number:</p>
+                        <p>Your e-ticket will be sent to:</p>
                         <span id="confirmPhone" class="highlight-phone">+233 XX XXX XXXX</span>
+                        <span id="confirmEmail" class="highlight-email">email@example.com</span>
                     </div>
                     <div class="confirmation-note">
-                        <p>📱 Please keep your phone handy</p>
-                        <p>⏱️ Verification usually takes 5-30 minutes</p>
-                        <p>❓ Questions? DM us on Instagram @kaizennights</p>
+                        <p>📱 Screenshot your QR code ticket</p>
+                        <p>📧 A confirmation email will also be sent</p>
+                        <p>🎫 Show QR code at entrance for scanning</p>
                     </div>
                     <button type="button" class="checkout-btn" onclick="closeModal()">
                         DONE
@@ -394,12 +617,7 @@
                 <span class="logo-kaizen">KAIZEN</span>
                 <span class="logo-nights">NIGHTS</span>
             </div>
-            <div class="footer-socials">
-                <a href="#" class="social-link">Instagram</a>
-                <a href="#" class="social-link">Twitter</a>
-                <a href="#" class="social-link">TikTok</a>
-            </div>
-            <p class="footer-copy">© 2026 Kaizen Nights Agency. All rights reserved.</p>
+            <p class="footer-copy">© 2026 Strategy Lab. All rights reserved.</p>
         </div>
     </footer>
 
