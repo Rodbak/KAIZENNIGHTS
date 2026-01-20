@@ -506,6 +506,8 @@
         let html5QrCode = null;
         let scanHistory = JSON.parse(localStorage.getItem('kaizenScanHistory') || '[]');
         let checkedIn = JSON.parse(localStorage.getItem('kaizenCheckedIn') || '[]');
+        let lastScannedCode = null;
+        let scanCooldown = false;
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -572,6 +574,15 @@
         
         // On successful scan
         function onScanSuccess(decodedText) {
+            // Prevent multiple scans of the same code
+            if (scanCooldown || decodedText === lastScannedCode) {
+                return;
+            }
+            
+            // Set cooldown
+            scanCooldown = true;
+            lastScannedCode = decodedText;
+            
             // Vibrate if supported
             if (navigator.vibrate) navigator.vibrate(200);
             
@@ -583,6 +594,11 @@
                 // Valid QR code with ticket data
                 if (data.r && data.r.startsWith('KZN-')) {
                     displayResult(data, true);
+                    // Reset cooldown after 3 seconds
+                    setTimeout(() => {
+                        scanCooldown = false;
+                        lastScannedCode = null;
+                    }, 3000);
                     return;
                 }
             } catch (e) {
@@ -592,11 +608,19 @@
             // Check if it's a reference code
             if (decodedText.startsWith('KZN-')) {
                 displayResult({ r: decodedText }, true);
+                setTimeout(() => {
+                    scanCooldown = false;
+                    lastScannedCode = null;
+                }, 3000);
                 return;
             }
             
             // Invalid
             displayResult({ r: decodedText }, false);
+            setTimeout(() => {
+                scanCooldown = false;
+                lastScannedCode = null;
+            }, 3000);
         }
         
         // Scan uploaded image
@@ -754,6 +778,9 @@
             document.getElementById('resultCard').classList.remove('show');
             document.getElementById('manualRef').value = '';
             window.currentScanData = null;
+            // Reset scan cooldown so next scan works immediately
+            scanCooldown = false;
+            lastScannedCode = null;
         }
         
         // Mark as used (check in)
@@ -775,6 +802,10 @@
             
             alert('✓ CHECKED IN!\n\nRef: ' + ref + '\nCustomer: ' + (window.currentScanData.n || 'N/A'));
             clearResult();
+            
+            // Reset cooldown for next scan
+            scanCooldown = false;
+            lastScannedCode = null;
         }
     </script>
 </body>
