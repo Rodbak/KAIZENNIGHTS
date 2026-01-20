@@ -506,7 +506,6 @@
         let html5QrCode = null;
         let scanHistory = JSON.parse(localStorage.getItem('kaizenScanHistory') || '[]');
         let checkedIn = JSON.parse(localStorage.getItem('kaizenCheckedIn') || '[]');
-        let lastScannedCode = null;
         let scanCooldown = false;
         
         // Initialize
@@ -574,14 +573,18 @@
         
         // On successful scan
         function onScanSuccess(decodedText) {
-            // Prevent multiple scans of the same code
-            if (scanCooldown || decodedText === lastScannedCode) {
+            // Prevent multiple scans
+            if (scanCooldown) {
                 return;
             }
             
-            // Set cooldown
+            // IMMEDIATELY set cooldown to block any more scans
             scanCooldown = true;
-            lastScannedCode = decodedText;
+            
+            // Pause the scanner to prevent multiple reads
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.pause(true);
+            }
             
             // Vibrate if supported
             if (navigator.vibrate) navigator.vibrate(200);
@@ -589,38 +592,26 @@
             console.log('Scanned:', decodedText);
             
             // Try to parse as JSON (QR code data)
+            let data = null;
+            let isValid = false;
+            
             try {
-                const data = JSON.parse(decodedText);
-                // Valid QR code with ticket data
+                data = JSON.parse(decodedText);
                 if (data.r && data.r.startsWith('KZN-')) {
-                    displayResult(data, true);
-                    // Reset cooldown after 3 seconds
-                    setTimeout(() => {
-                        scanCooldown = false;
-                        lastScannedCode = null;
-                    }, 3000);
-                    return;
+                    isValid = true;
                 }
             } catch (e) {
-                // Not JSON
+                // Not JSON - check if it's a reference code
+                if (decodedText.startsWith('KZN-')) {
+                    data = { r: decodedText };
+                    isValid = true;
+                } else {
+                    data = { r: decodedText };
+                    isValid = false;
+                }
             }
             
-            // Check if it's a reference code
-            if (decodedText.startsWith('KZN-')) {
-                displayResult({ r: decodedText }, true);
-                setTimeout(() => {
-                    scanCooldown = false;
-                    lastScannedCode = null;
-                }, 3000);
-                return;
-            }
-            
-            // Invalid
-            displayResult({ r: decodedText }, false);
-            setTimeout(() => {
-                scanCooldown = false;
-                lastScannedCode = null;
-            }, 3000);
+            displayResult(data, isValid);
         }
         
         // Scan uploaded image
@@ -773,14 +764,24 @@
             `).join('');
         }
         
-        // Clear result
+        // Clear result and resume scanning
         function clearResult() {
             document.getElementById('resultCard').classList.remove('show');
             document.getElementById('manualRef').value = '';
             window.currentScanData = null;
-            // Reset scan cooldown so next scan works immediately
+            
+            // Reset cooldown
             scanCooldown = false;
-            lastScannedCode = null;
+            
+            // Resume scanner if it was paused
+            try {
+                if (html5QrCode) {
+                    html5QrCode.resume();
+                    console.log('Scanner resumed');
+                }
+            } catch (e) {
+                console.log('Scanner not paused or not running');
+            }
         }
         
         // Mark as used (check in)
@@ -802,10 +803,6 @@
             
             alert('✓ CHECKED IN!\n\nRef: ' + ref + '\nCustomer: ' + (window.currentScanData.n || 'N/A'));
             clearResult();
-            
-            // Reset cooldown for next scan
-            scanCooldown = false;
-            lastScannedCode = null;
         }
     </script>
 </body>
