@@ -492,27 +492,26 @@ function generateTicketQR(orderData) {
         d: orderData.paid           // Payment timestamp
     });
     
-    // Generate QR Code using the library
-    if (typeof QRCode !== 'undefined') {
-        QRCode.toCanvas(qrData, {
-            width: 200,
-            margin: 2,
-            color: {
-                dark: '#000000',
-                light: '#FFFFFF'
-            }
-        }, function(error, canvas) {
-            if (error) {
-                console.error('QR Code generation error:', error);
-                // Fallback to text-based display
-                qrContainer.innerHTML = `<div style="padding:20px;text-align:center;font-family:monospace;font-size:12px;background:#fff;color:#000;word-break:break-all;">${orderData.ref}</div>`;
-            } else {
-                qrContainer.appendChild(canvas);
-            }
-        });
-    } else {
-        // Fallback if QRCode library not loaded
-        qrContainer.innerHTML = `<div style="padding:20px;text-align:center;font-family:monospace;font-size:14px;background:#fff;color:#000;"><strong>${orderData.ref}</strong><br><small>Ref Code</small></div>`;
+    // Generate QR Code using QRCode.js library
+    try {
+        if (typeof QRCode !== 'undefined') {
+            new QRCode(qrContainer, {
+                text: qrData,
+                width: 180,
+                height: 180,
+                colorDark: '#000000',
+                colorLight: '#FFFFFF',
+                correctLevel: QRCode.CorrectLevel.M
+            });
+            console.log('QR Code generated successfully');
+        } else {
+            throw new Error('QRCode library not loaded');
+        }
+    } catch (error) {
+        console.error('QR Code generation error:', error);
+        // Fallback to Google Charts QR API
+        const encodedData = encodeURIComponent(qrData);
+        qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodedData}" alt="QR Code" style="display:block;">`;
     }
 }
 

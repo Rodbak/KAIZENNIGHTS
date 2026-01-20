@@ -383,9 +383,19 @@
             </div>
         </div>
         
+        <!-- QR Image Upload (Backup) -->
+        <div class="manual-entry">
+            <h3>📤 Upload QR Screenshot</h3>
+            <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 1rem;">
+                If camera doesn't work, upload a screenshot of the QR code
+            </p>
+            <input type="file" id="qrUpload" accept="image/*" onchange="scanUploadedImage(event)" 
+                   style="width: 100%; padding: 0.75rem; background: var(--dark-bg); border: 2px dashed #333; border-radius: 8px; color: white; cursor: pointer;">
+        </div>
+
         <!-- Manual Entry -->
         <div class="manual-entry">
-            <h3>Manual Reference Lookup</h3>
+            <h3>🔤 Manual Reference Lookup</h3>
             <div class="input-group">
                 <input type="text" id="manualRef" placeholder="Enter reference (e.g. KZN-...)" 
                        onkeypress="if(event.key === 'Enter') lookupReference()">
@@ -467,6 +477,10 @@
         
         // Start Scanner
         function startScanner() {
+            const startBtn = document.getElementById('startBtn');
+            startBtn.textContent = '⏳ Starting...';
+            startBtn.disabled = true;
+            
             html5QrCode = new Html5Qrcode("reader");
             
             html5QrCode.start(
@@ -478,10 +492,51 @@
                 onScanSuccess,
                 onScanError
             ).then(() => {
-                document.getElementById('startBtn').disabled = true;
+                startBtn.textContent = '📷 Camera Active';
+                document.getElementById('stopBtn').disabled = false;
+                console.log('Camera started successfully');
+            }).catch(err => {
+                console.error('Camera error:', err);
+                startBtn.disabled = false;
+                startBtn.textContent = '📷 Start Camera';
+                
+                // Show helpful error message
+                let errorMsg = 'Camera error: ';
+                if (err.toString().includes('NotAllowedError')) {
+                    errorMsg = '❌ Camera permission denied!\n\nPlease allow camera access:\n• iPhone: Settings → Safari → Camera → Allow\n• Android: Settings → Apps → Chrome → Permissions → Camera';
+                } else if (err.toString().includes('NotFoundError')) {
+                    errorMsg = '❌ No camera found on this device.';
+                } else if (err.toString().includes('NotReadableError')) {
+                    errorMsg = '❌ Camera is being used by another app. Close other apps and try again.';
+                } else if (err.toString().includes('OverconstrainedError')) {
+                    errorMsg = '❌ Camera not compatible. Trying front camera...';
+                    // Try front camera as fallback
+                    tryFrontCamera();
+                    return;
+                } else {
+                    errorMsg += err;
+                }
+                alert(errorMsg);
+            });
+        }
+        
+        // Fallback to front camera
+        function tryFrontCamera() {
+            html5QrCode.start(
+                { facingMode: "user" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                onScanSuccess,
+                onScanError
+            ).then(() => {
+                document.getElementById('startBtn').textContent = '📷 Front Camera Active';
                 document.getElementById('stopBtn').disabled = false;
             }).catch(err => {
-                alert('Camera error: ' + err);
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('startBtn').textContent = '📷 Start Camera';
+                alert('❌ Could not access any camera.\n\nMake sure:\n1. You\'re using HTTPS\n2. Camera permission is allowed\n3. No other app is using the camera');
             });
         }
         
@@ -512,6 +567,34 @@
         
         function onScanError(error) {
             // Ignore scan errors (no QR found)
+        }
+        
+        // Scan uploaded QR image
+        function scanUploadedImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const html5QrCodeScanner = new Html5Qrcode("reader");
+            
+            html5QrCodeScanner.scanFile(file, true)
+                .then(decodedText => {
+                    // Vibrate if supported
+                    if (navigator.vibrate) navigator.vibrate(200);
+                    
+                    try {
+                        const data = JSON.parse(decodedText);
+                        displayResult(data, true);
+                    } catch (e) {
+                        lookupByRef(decodedText);
+                    }
+                    
+                    // Clear the file input
+                    event.target.value = '';
+                })
+                .catch(err => {
+                    alert('❌ Could not read QR code from image.\n\nMake sure the image clearly shows the QR code.');
+                    event.target.value = '';
+                });
         }
         
         // Lookup by reference
