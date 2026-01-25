@@ -86,6 +86,18 @@ function selectTicket(type, price) {
     // Reset form and steps
     resetCheckout();
     
+    // Show/hide vendor fields
+    const vendorFields = document.getElementById('vendorFields');
+    if (type === 'vendor') {
+        vendorFields.classList.remove('hidden');
+        document.getElementById('standName').setAttribute('required', 'required');
+        document.getElementById('products').setAttribute('required', 'required');
+    } else {
+        vendorFields.classList.add('hidden');
+        document.getElementById('standName').removeAttribute('required');
+        document.getElementById('products').removeAttribute('required');
+    }
+    
     // Open modal
     openModal();
     
@@ -218,6 +230,22 @@ function validateStep1() {
     if (!phone || phone.length < 10) {
         showError('Please enter a valid WhatsApp number');
         return false;
+    }
+    
+    // Validate vendor fields if vendor ticket selected
+    if (selectedTicket === 'vendor') {
+        const standName = document.getElementById('standName').value.trim();
+        const products = document.getElementById('products').value.trim();
+        
+        if (!standName) {
+            showError('Please enter your stand/business name');
+            return false;
+        }
+        
+        if (!products) {
+            showError('Please describe what you will be selling');
+            return false;
+        }
     }
     
     return true;
@@ -457,6 +485,14 @@ function handlePaymentSuccess(reference, amount, quantity) {
         paid: new Date().toISOString(),
         valid: true
     };
+    
+    // Add vendor info if vendor ticket
+    if (selectedTicket === 'vendor') {
+        orderData.vendor = {
+            standName: document.getElementById('standName').value.trim(),
+            products: document.getElementById('products').value.trim()
+        };
+    }
     
     // Generate QR Code with ticket data
     generateTicketQR(orderData);

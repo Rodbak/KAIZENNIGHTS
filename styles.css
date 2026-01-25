@@ -201,6 +201,7 @@ body {
     margin-bottom: 2rem;
     clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
     animation: badgePulse 2s ease-in-out infinite;
+    transform: rotate(-3deg);
 }
 
 @keyframes badgePulse {
@@ -218,11 +219,25 @@ body {
     font-size: clamp(4rem, 15vw, 10rem);
     color: var(--pure-white);
     line-height: 0.9;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
+    /* White text with red 3D offset shadow effect */
     text-shadow: 
+        /* Red outline/stroke effect */
+        2px 0 0 var(--primary-red),
+        -2px 0 0 var(--primary-red),
+        0 2px 0 var(--primary-red),
+        0 -2px 0 var(--primary-red),
+        /* 3D offset shadow */
         4px 4px 0 var(--primary-red),
-        8px 8px 0 rgba(231, 28, 35, 0.3);
+        5px 5px 0 var(--primary-red),
+        6px 6px 0 var(--primary-red),
+        7px 7px 0 var(--primary-red),
+        8px 8px 0 var(--primary-red),
+        9px 9px 0 var(--primary-red),
+        10px 10px 0 var(--primary-red);
     animation: titleSlide 1s ease-out;
+    -webkit-text-stroke: 2px var(--primary-red);
+    paint-order: stroke fill;
 }
 
 .title-sub {
@@ -230,8 +245,14 @@ body {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 8vw, 5rem);
     color: var(--primary-red);
-    letter-spacing: 0.5em;
-    margin-left: 0.5em;
+    letter-spacing: 0.6em;
+    margin-left: 0.3em;
+    /* 3D shadow effect for NIGHTS */
+    text-shadow: 
+        3px 3px 0 rgba(139, 0, 0, 0.8),
+        4px 4px 0 rgba(139, 0, 0, 0.6),
+        5px 5px 0 rgba(139, 0, 0, 0.4),
+        6px 6px 0 rgba(139, 0, 0, 0.2);
     animation: titleSlide 1s ease-out 0.2s backwards;
 }
 
@@ -1657,6 +1678,176 @@ body {
     background: linear-gradient(90deg, rgba(231, 28, 35, 0.2) 0%, transparent 100%);
     color: var(--primary-red) !important;
     font-weight: 700;
+}
+
+/* ============================================
+   DEMON SLAYER THEMED STYLES
+   ============================================ */
+
+/* Featured Movie Banner */
+.featured-movie {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(103, 58, 183, 0.3) 50%, rgba(231, 28, 35, 0.3) 100%);
+    border: 2px solid;
+    border-image: linear-gradient(135deg, #00BCD4, #E91E63, #FF5722) 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-movie::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%2300BCD4' fill-opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.movie-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00BCD4, #4DD0E1);
+    color: var(--pure-black);
+    padding: 0.4rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.movie-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 8vw, 4rem);
+    color: var(--pure-white);
+    text-shadow: 
+        2px 2px 0 #E91E63,
+        4px 4px 0 rgba(233, 30, 99, 0.4);
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.05em;
+}
+
+.movie-subtitle {
+    font-family: var(--font-heading);
+    font-size: clamp(1rem, 4vw, 1.8rem);
+    color: #00BCD4;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.5rem;
+}
+
+.movie-tagline {
+    font-size: 1rem;
+    color: var(--light-gray);
+    letter-spacing: 0.3em;
+}
+
+/* Demon Slayer Card Theme */
+.demon-slayer-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.demon-slayer-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 60%, rgba(0, 188, 212, 0.1) 100%);
+    pointer-events: none;
+}
+
+.ds-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(0, 188, 212, 0.02) 10px,
+            rgba(0, 188, 212, 0.02) 20px
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+.demon-slayer-card .ticket-header,
+.demon-slayer-card .ticket-price,
+.demon-slayer-card .ticket-features,
+.demon-slayer-card .ticket-btn {
+    position: relative;
+    z-index: 1;
+}
+
+.movie-feature-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #E91E63, #FF5722);
+    color: var(--pure-white);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-top: 0.5rem;
+    border-radius: 2px;
+}
+
+/* Vendor Fields in Checkout */
+.vendor-fields {
+    background: linear-gradient(135deg, var(--medium-gray) 0%, rgba(231, 28, 35, 0.1) 100%);
+    border: 1px solid var(--primary-red);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+.vendor-fields.hidden {
+    display: none;
+}
+
+.vendor-fields-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--primary-red);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed var(--medium-gray);
+}
+
+.vendor-fields-icon {
+    font-size: 1.2rem;
+}
+
+.vendor-fields textarea {
+    width: 100%;
+    padding: 1rem;
+    background: var(--rich-black);
+    border: 1px solid var(--medium-gray);
+    color: var(--pure-white);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color var(--transition-fast);
+}
+
+.vendor-fields textarea:focus {
+    outline: none;
+    border-color: var(--primary-red);
+}
+
+.vendor-fields textarea::placeholder {
+    color: var(--light-gray);
+    opacity: 0.6;
 }
 
 /* ============================================

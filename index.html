@@ -45,9 +45,18 @@
                 <span class="title-sub">NIGHTS</span>
             </h1>
             <p class="hero-tagline">映画の夜 • MOVIE & GAMING EXPERIENCE</p>
+            
+            <!-- Featured Movie Banner -->
+            <div class="featured-movie">
+                <div class="movie-badge">🎬 SCREENING</div>
+                <h2 class="movie-title">DEMON SLAYER</h2>
+                <h3 class="movie-subtitle">INFINITY CASTLE ARC</h3>
+                <p class="movie-tagline">鬼滅の刃 • 無限城編</p>
+            </div>
+            
             <p class="hero-description">
-                Experience the ultimate entertainment night! Movie screenings, gaming tournaments, 
-                FIFA competition with GHS 1,500 in prizes, and an epic after party with a famous DJ!
+                Experience the ultimate entertainment night! Watch the epic Demon Slayer: Infinity Castle movie, 
+                compete in our EA FC 26 tournament with GHS 1,500 in prizes, and party with a famous DJ!
             </p>
             <div class="hero-date">
                 <div class="date-box">
@@ -81,11 +90,13 @@
 
         <div class="tickets-container">
             <!-- Movie Pass -->
-            <div class="ticket-card" data-ticket="movie">
+            <div class="ticket-card demon-slayer-card" data-ticket="movie">
                 <div class="ticket-ribbon">MOVIE</div>
+                <div class="ds-pattern"></div>
                 <div class="ticket-header">
-                    <span class="ticket-jp">映画パス</span>
+                    <span class="ticket-jp">鬼滅の刃</span>
                     <h3 class="ticket-name">MOVIE PASS</h3>
+                    <span class="movie-feature-tag">DEMON SLAYER: INFINITY CASTLE</span>
                 </div>
                 <div class="ticket-price">
                     <span class="currency">GHS</span>
@@ -94,7 +105,7 @@
                 <ul class="ticket-features">
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        Movie Theater Entry
+                        Demon Slayer: Infinity Castle
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
@@ -112,9 +123,9 @@
                         <span class="feature-icon">✗</span>
                         Gaming Zone Access
                     </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        After Party Access
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        After Party Access (FREE)
                     </li>
                 </ul>
                 <button class="ticket-btn" onclick="selectTicket('movie', 100)">
@@ -154,9 +165,9 @@
                         <span class="feature-icon">✗</span>
                         Movie Theater Access
                     </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Snacks & Drinks
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        After Party Access (FREE)
                     </li>
                 </ul>
                 <button class="ticket-btn" onclick="selectTicket('gaming', 100)">
@@ -165,11 +176,13 @@
             </div>
 
             <!-- Combo Pass -->
-            <div class="ticket-card featured" data-ticket="combo">
+            <div class="ticket-card featured demon-slayer-card" data-ticket="combo">
                 <div class="ticket-ribbon">BEST VALUE</div>
+                <div class="ds-pattern"></div>
                 <div class="ticket-header">
                     <span class="ticket-jp">コンボパス</span>
                     <h3 class="ticket-name">COMBO PASS</h3>
+                    <span class="movie-feature-tag">FULL EXPERIENCE</span>
                 </div>
                 <div class="ticket-price">
                     <span class="currency">GHS</span>
@@ -178,7 +191,7 @@
                 <ul class="ticket-features">
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        Movie Theater Entry
+                        Demon Slayer: Infinity Castle
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
@@ -194,7 +207,7 @@
                     </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
-                        After Party Access
+                        After Party Access (FREE)
                     </li>
                     <li class="included highlight-feature">
                         <span class="feature-icon">★</span>
@@ -244,7 +257,7 @@
                 <div class="info-card">
                     <span class="info-icon">🎮</span>
                     <h4>GAME</h4>
-                    <p>EA FC 24 / FIFA 24</p>
+                    <p>EA FC 26</p>
                 </div>
                 <div class="info-card">
                     <span class="info-icon">👥</span>
@@ -332,13 +345,13 @@
             </div>
             
             <p class="afterparty-note">
-                <strong>Access included with COMBO PASS!</strong> 
-                Get the full Kaizen Nights experience.
+                <strong>FREE for ALL ticket holders!</strong> 
+                Everyone gets to party!
             </p>
             
             <a href="#tickets" class="cta-button afterparty-cta">
-                <span class="cta-text">GET YOUR COMBO PASS</span>
-                <span class="cta-jp">コンボパスを購入</span>
+                <span class="cta-text">GET YOUR TICKETS</span>
+                <span class="cta-jp">チケットを購入</span>
             </a>
         </div>
     </section>
@@ -397,6 +410,23 @@
                         <label for="phone">WhatsApp Number</label>
                         <input type="tel" id="phone" placeholder="+233 XX XXX XXXX" required>
                     </div>
+                    
+                    <!-- Vendor-specific fields (shown only for vendor tickets) -->
+                    <div id="vendorFields" class="vendor-fields hidden">
+                        <div class="vendor-fields-header">
+                            <span class="vendor-fields-icon">🏪</span>
+                            <span>VENDOR DETAILS</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="standName">Stand/Business Name</label>
+                            <input type="text" id="standName" placeholder="e.g. Mama's Kitchen, TechGadgets GH">
+                        </div>
+                        <div class="form-group">
+                            <label for="products">What will you be selling?</label>
+                            <textarea id="products" rows="3" placeholder="Describe your products or services (e.g. Jollof rice, drinks, phone accessories, clothes...)"></textarea>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="quantity">Number of Tickets</label>
                         <select id="quantity" onchange="updateTotal()">
