@@ -58,6 +58,18 @@ const ticketData = {
             'SAVE GHS 30!'
         ]
     },
+    party: {
+        name: 'PARTY PASS',
+        nameJP: 'パーティーパス',
+        price: 60,
+        access: ['AFTERPARTY'],
+        accessLabel: 'After Party Only',
+        features: [
+            'After Party Access',
+            'Live DJ Performance',
+            'Dance Floor Access'
+        ]
+    },
     vendor: {
         name: 'VENDOR SPOT',
         nameJP: '出店者',
@@ -712,3 +724,43 @@ document.getElementById('quantity')?.addEventListener('keydown', (e) => {
 // Console message for developers
 console.log('%c🎬 KAIZEN NIGHTS', 'font-size: 24px; font-weight: bold; color: #E71C23;');
 console.log('%cPowered by Paystack Payment Gateway', 'font-size: 12px; color: #888;');
+
+// ===========================================
+// JAPANESE DOOR PRELOADER
+// ===========================================
+
+// Lock body scroll during preloader
+document.body.classList.add('loading');
+
+// Preloader logic
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    
+    // Minimum display time for the preloader (so users can see the animation)
+    const minDisplayTime = 2000; // 2 seconds
+    const loadTime = performance.now();
+    const remainingTime = Math.max(0, minDisplayTime - loadTime);
+    
+    // Wait for minimum time, then trigger door opening
+    setTimeout(() => {
+        // Add loaded class to trigger door animation
+        preloader.classList.add('loaded');
+        
+        // Unlock body scroll
+        document.body.classList.remove('loading');
+        
+        // Remove preloader from DOM after animation completes
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 1500); // Match the door transition duration
+        
+    }, remainingTime);
+});
+
+// Optional: Play sliding door sound effect
+function playDoorSound() {
+    // Uncomment to enable sound (requires audio file)
+    // const audio = new Audio('door-slide.mp3');
+    // audio.volume = 0.3;
+    // audio.play().catch(() => {}); // Silently fail if autoplay blocked
+}

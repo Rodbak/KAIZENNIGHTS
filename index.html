@@ -13,6 +13,39 @@
     <!-- QR Code: Using API-based generation (no library needed) -->
 </head>
 <body>
+    <!-- Japanese Door Preloader -->
+    <div class="preloader" id="preloader">
+        <!-- Left Door -->
+        <div class="door door-left">
+            <div class="shoji-grid">
+                <div class="shoji-frame"></div>
+            </div>
+            <div class="door-handle door-handle-right"></div>
+        </div>
+        
+        <!-- Center Logo (on top of doors) -->
+        <div class="preloader-logo">
+            <div class="preloader-text-jp">開く</div>
+            <div class="preloader-brand">
+                <span class="preloader-kaizen">KAIZEN</span>
+                <span class="preloader-nights">NIGHTS</span>
+            </div>
+            <div class="preloader-loading">
+                <span class="loading-dot"></span>
+                <span class="loading-dot"></span>
+                <span class="loading-dot"></span>
+            </div>
+        </div>
+        
+        <!-- Right Door -->
+        <div class="door door-right">
+            <div class="shoji-grid">
+                <div class="shoji-frame"></div>
+            </div>
+            <div class="door-handle door-handle-left"></div>
+        </div>
+    </div>
+
     <!-- Animated Background -->
     <div class="manga-bg">
         <div class="speed-lines"></div>
@@ -167,6 +200,48 @@
                     </li>
                 </ul>
                 <button class="ticket-btn" onclick="selectTicket('gaming', 100)">
+                    SELECT PASS
+                </button>
+            </div>
+
+            <!-- Party Pass -->
+            <div class="ticket-card" data-ticket="party">
+                <div class="ticket-ribbon">PARTY</div>
+                <div class="ticket-header">
+                    <span class="ticket-jp">パーティーパス</span>
+                    <h3 class="ticket-name">PARTY PASS</h3>
+                </div>
+                <div class="ticket-price">
+                    <span class="currency">GHS</span>
+                    <span class="amount">60</span>
+                </div>
+                <ul class="ticket-features">
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        After Party Access
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Live DJ Performance
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Dance Floor Access
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Movie Theater Access
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Gaming Zone Access
+                    </li>
+                    <li class="not-included">
+                        <span class="feature-icon">✗</span>
+                        Snacks & Drinks
+                    </li>
+                </ul>
+                <button class="ticket-btn" onclick="selectTicket('party', 60)">
                     SELECT PASS
                 </button>
             </div>
