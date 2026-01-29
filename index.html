@@ -729,9 +729,76 @@
                 <span class="logo-kaizen">KAIZEN</span>
                 <span class="logo-nights">NIGHTS</span>
             </div>
+            
+            <!-- Contact Section -->
+            <div class="footer-contact">
+                <p class="contact-title">📞 CONTACT US</p>
+                <a href="https://wa.me/233530402249" class="whatsapp-link" target="_blank">
+                    <span class="whatsapp-icon">💬</span>
+                    <span class="whatsapp-text">WhatsApp: 0530402249</span>
+                </a>
+                <p class="contact-note">Call or message us anytime!</p>
+            </div>
+            
             <p class="footer-copy">© 2026 Strategy Lab. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Anime Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <!-- Chat Toggle Button -->
+        <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
+            <div class="chatbot-avatar">
+                <div class="avatar-face">
+                    <div class="avatar-eyes">
+                        <span class="eye left"></span>
+                        <span class="eye right"></span>
+                    </div>
+                    <div class="avatar-mouth"></div>
+                </div>
+                <div class="avatar-hair"></div>
+            </div>
+            <span class="chat-notification" id="chatNotification">1</span>
+        </button>
+
+        <!-- Chat Window -->
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-avatar">
+                    <div class="mini-avatar">
+                        <div class="mini-eyes">
+                            <span class="mini-eye"></span>
+                            <span class="mini-eye"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chatbot-header-info">
+                    <h4>Kaizen-chan</h4>
+                    <span class="status-online">● Online</span>
+                </div>
+                <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatMessages">
+                <!-- Messages will be added here -->
+            </div>
+            
+            <div class="chatbot-quick-replies" id="quickReplies">
+                <button class="quick-reply" onclick="sendQuickReply('When is the event?')">📅 Event Date</button>
+                <button class="quick-reply" onclick="sendQuickReply('What are the ticket prices?')">🎟️ Prices</button>
+                <button class="quick-reply" onclick="sendQuickReply('Where is the venue?')">📍 Location</button>
+                <button class="quick-reply" onclick="sendQuickReply('What time does the party start?')">🕙 Party Time</button>
+                <button class="quick-reply" onclick="sendQuickReply('Who is performing?')">🎤 Artists</button>
+                <button class="quick-reply" onclick="sendQuickReply('Do you have arcade machines?')">🕹️ Arcade</button>
+                <button class="quick-reply" onclick="sendQuickReply('How can I contact you?')">📞 Contact</button>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask me anything..." onkeypress="handleChatKeypress(event)">
+                <button class="chat-send" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

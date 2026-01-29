@@ -764,3 +764,257 @@ function playDoorSound() {
     // audio.volume = 0.3;
     // audio.play().catch(() => {}); // Silently fail if autoplay blocked
 }
+
+// ===========================================
+// KAIZEN-CHAN ANIME CHATBOT
+// ===========================================
+
+// Event information for chatbot responses
+const eventInfo = {
+    name: 'Kaizen Nights',
+    date: 'February 6, 2026',
+    venue: 'Academic City University',
+    partyTime: '10PM',
+    dj: 'DJ Absolute',
+    mc: 'MC Amount',
+    artists: ['Jaymore', 'Keli'],
+    contact: '0530402249',
+    tickets: {
+        movie: { name: 'Movie Pass', price: 100, includes: 'Movie screening, free popcorn & drink, after party access' },
+        gaming: { name: 'Gaming Pass', price: 100, includes: 'Gaming zone access, FIFA tournament entry, after party access' },
+        party: { name: 'Party Pass', price: 60, includes: 'After party access only' },
+        combo: { name: 'Combo Pass', price: 170, includes: 'Everything! Movie + Gaming + After Party (Save GHS 30!)' },
+        vendor: { name: 'Vendor Spot', price: 200, includes: 'Prime location, table & setup space, social media promotion' }
+    },
+    prizes: {
+        first: 'GHS 1,000',
+        second: 'GHS 500',
+        total: 'GHS 1,500'
+    },
+    arcade: 'Pay-to-play arcade machines available on site!'
+};
+
+// Chatbot state
+let chatbotOpen = false;
+let hasGreeted = false;
+
+// Chatbot responses based on keywords
+function getChatbotResponse(message) {
+    const lowerMsg = message.toLowerCase();
+    
+    // Greetings
+    if (lowerMsg.match(/^(hi|hello|hey|yo|sup|what's up|howdy|hola)/)) {
+        return `Konnichiwa! 👋✨ Welcome to Kaizen Nights! I'm Kaizen-chan, your anime event assistant! How can I help you today? Feel free to ask about tickets, the event, performers, or anything else!`;
+    }
+    
+    // Date & Time
+    if (lowerMsg.includes('when') || lowerMsg.includes('date') || lowerMsg.includes('day')) {
+        return `📅 Kaizen Nights is happening on **${eventInfo.date}**! Mark your calendar and don't miss it! The after party starts at **${eventInfo.partyTime}** 🎉`;
+    }
+    
+    // Location/Venue
+    if (lowerMsg.includes('where') || lowerMsg.includes('venue') || lowerMsg.includes('location') || lowerMsg.includes('place')) {
+        return `📍 We're at **${eventInfo.venue}**! It's going to be epic! See you there! 🏫✨`;
+    }
+    
+    // Party time
+    if (lowerMsg.includes('party') && (lowerMsg.includes('time') || lowerMsg.includes('start') || lowerMsg.includes('when'))) {
+        return `🕙 The After Party starts at **${eventInfo.partyTime}**! Get ready to dance the night away with ${eventInfo.dj} and ${eventInfo.mc}! 💃🕺`;
+    }
+    
+    // Ticket prices
+    if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('how much') || lowerMsg.includes('ticket')) {
+        return `🎟️ Here are our ticket options:\n\n` +
+            `• **Movie Pass** - GHS 100\n  (Movie + popcorn + drink + after party)\n\n` +
+            `• **Gaming Pass** - GHS 100\n  (Gaming + FIFA tournament + after party)\n\n` +
+            `• **Party Pass** - GHS 60\n  (After party only)\n\n` +
+            `• **Combo Pass** - GHS 170 ⭐ BEST VALUE!\n  (Everything included, save GHS 30!)\n\n` +
+            `Click the TICKETS section to get yours! 🎫`;
+    }
+    
+    // Movie Pass specific
+    if (lowerMsg.includes('movie pass') || (lowerMsg.includes('movie') && lowerMsg.includes('ticket'))) {
+        return `🎬 The **Movie Pass** is GHS 100 and includes:\n• Full movie screening\n• Free popcorn 🍿\n• Free drink 🥤\n• After party access!\n\nPerfect for film lovers! 🎥`;
+    }
+    
+    // Gaming Pass specific
+    if (lowerMsg.includes('gaming pass') || lowerMsg.includes('gaming ticket') || lowerMsg.includes('gamer')) {
+        return `🎮 The **Gaming Pass** is GHS 100 and includes:\n• Gaming zone access\n• FIFA tournament entry\n• Chance to win GHS 1,500!\n• After party access!\n\n🕹️ Plus there are pay-to-play **arcade machines** on site too!\n\nAre you ready to compete? 🏆`;
+    }
+    
+    // Combo Pass specific
+    if (lowerMsg.includes('combo') || lowerMsg.includes('full') || lowerMsg.includes('everything') || lowerMsg.includes('best')) {
+        return `⭐ The **Combo Pass** is our BEST VALUE at GHS 170!\n\nYou get EVERYTHING:\n• Movie screening 🎬\n• Free popcorn & drink 🍿🥤\n• Gaming zone access 🎮\n• FIFA tournament entry 🏆\n• After party access 🎉\n\nYou save GHS 30! It's the ultimate experience! 💫`;
+    }
+    
+    // Party Pass specific
+    if (lowerMsg.includes('party pass') || lowerMsg.includes('party ticket') || lowerMsg.includes('party only')) {
+        return `🎉 The **Party Pass** is GHS 60 and gives you access to the After Party starting at ${eventInfo.partyTime}!\n\nFeaturing:\n• ${eventInfo.dj} 🎧\n• ${eventInfo.mc} 🎤\n• Live performances by Jaymore & Keli 🎵\n\nLet's party! 💃`;
+    }
+    
+    // FIFA/Competition
+    if (lowerMsg.includes('fifa') || lowerMsg.includes('tournament') || lowerMsg.includes('competition') || lowerMsg.includes('prize')) {
+        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\nGet a Gaming Pass or Combo Pass to enter! May the best player win! 🎮⚽`;
+    }
+    
+    // Artists/Performers
+    if (lowerMsg.includes('artist') || lowerMsg.includes('perform') || lowerMsg.includes('who is') || lowerMsg.includes('lineup') || lowerMsg.includes('jaymore') || lowerMsg.includes('keli')) {
+        return `🎤 **Performing Artists:**\n\n✨ **Jaymore**\n✨ **Keli**\n\nPlus:\n🎧 **${eventInfo.dj}** on the decks\n🎤 **${eventInfo.mc}** keeping the energy high!\n\nIt's going to be legendary! 🔥`;
+    }
+    
+    // DJ
+    if (lowerMsg.includes('dj')) {
+        return `🎧 **${eventInfo.dj}** will be spinning the hottest tracks at the After Party starting at ${eventInfo.partyTime}! Get ready to dance! 💃🕺🔥`;
+    }
+    
+    // MC
+    if (lowerMsg.includes('mc') || lowerMsg.includes('host')) {
+        return `🎤 **${eventInfo.mc}** is our MC for the night! They'll be keeping the energy HIGH and the vibes RIGHT! 🔥✨`;
+    }
+    
+    // Contact
+    if (lowerMsg.includes('contact') || lowerMsg.includes('call') || lowerMsg.includes('whatsapp') || lowerMsg.includes('phone') || lowerMsg.includes('reach') || lowerMsg.includes('number')) {
+        return `📞 You can reach us on WhatsApp!\n\n**${eventInfo.contact}**\n\nCall or message anytime! We're here to help! 💬✨`;
+    }
+    
+    // Vendor
+    if (lowerMsg.includes('vendor') || lowerMsg.includes('sell') || lowerMsg.includes('booth') || lowerMsg.includes('stand')) {
+        return `🏪 Want to be a **Vendor** at Kaizen Nights?\n\n• Vendor Spot: GHS 200\n• Prime location\n• Access to 500+ attendees\n• Table & setup space provided\n• Social media promotion\n\nPerfect for food, drinks, merch, and more! Book now! 🛍️`;
+    }
+    
+    // Food/Drinks
+    if (lowerMsg.includes('food') || lowerMsg.includes('drink') || lowerMsg.includes('snack') || lowerMsg.includes('popcorn')) {
+        return `🍿 Movie Pass & Combo Pass holders get:\n• 1 FREE Popcorn 🍿\n• 1 FREE Drink 🥤\n\nPlus our vendors will have delicious food and drinks available for purchase! 🍔🥤`;
+    }
+    
+    // Arcade
+    if (lowerMsg.includes('arcade') || lowerMsg.includes('machine') || lowerMsg.includes('games on site') || lowerMsg.includes('other games')) {
+        return `🕹️ **Arcade Machines!**\n\nYes! We have pay-to-play arcade machines available on site! 🎮\n\nCome enjoy some classic arcade gaming fun while you're at the event! Perfect for chilling between activities! 👾✨`;
+    }
+    
+    // Thanks
+    if (lowerMsg.includes('thank') || lowerMsg.includes('thanks') || lowerMsg.includes('arigatou')) {
+        return `Arigatou gozaimasu! 🙏✨ You're welcome! If you have any more questions, I'm always here to help! See you at Kaizen Nights! 🎉💫`;
+    }
+    
+    // Bye
+    if (lowerMsg.includes('bye') || lowerMsg.includes('goodbye') || lowerMsg.includes('later') || lowerMsg.includes('see you')) {
+        return `Sayonara! 👋✨ Don't forget to get your tickets! See you at Kaizen Nights on ${eventInfo.date}! じゃね! 🎉🌸`;
+    }
+    
+    // Default response
+    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n• 📅 Event date & time\n• 📍 Venue location\n• 🎟️ Ticket prices\n• 🎤 Performing artists\n• 🏆 FIFA tournament\n• 🕹️ Arcade machines\n• 📞 Contact info\n\nJust ask me anything about Kaizen Nights! ✨`;
+}
+
+// Toggle chatbot window
+function toggleChatbot() {
+    const chatWindow = document.getElementById('chatbotWindow');
+    const notification = document.getElementById('chatNotification');
+    
+    chatbotOpen = !chatbotOpen;
+    
+    if (chatbotOpen) {
+        chatWindow.classList.add('active');
+        notification.classList.add('hidden');
+        
+        // Send greeting if first time
+        if (!hasGreeted) {
+            setTimeout(() => {
+                addBotMessage("Konnichiwa! 👋✨ I'm Kaizen-chan! Ask me anything about Kaizen Nights - tickets, performers, venue, or dates! 🎉");
+                hasGreeted = true;
+            }, 500);
+        }
+        
+        // Focus input
+        setTimeout(() => {
+            document.getElementById('chatInput').focus();
+        }, 300);
+    } else {
+        chatWindow.classList.remove('active');
+    }
+}
+
+// Add bot message to chat
+function addBotMessage(text) {
+    const messagesContainer = document.getElementById('chatMessages');
+    
+    // Show typing indicator first
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'typing-indicator';
+    typingDiv.innerHTML = `
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+    `;
+    messagesContainer.appendChild(typingDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Remove typing and show message after delay
+    setTimeout(() => {
+        typingDiv.remove();
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message bot';
+        messageDiv.innerHTML = `<div class="bot-name">Kaizen-chan</div>${formatMessage(text)}`;
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 800 + Math.random() * 500);
+}
+
+// Add user message to chat
+function addUserMessage(text) {
+    const messagesContainer = document.getElementById('chatMessages');
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'chat-message user';
+    messageDiv.textContent = text;
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Format message (convert **text** to bold)
+function formatMessage(text) {
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+}
+
+// Send message
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message
+    addUserMessage(message);
+    input.value = '';
+    
+    // Get and display bot response
+    const response = getChatbotResponse(message);
+    addBotMessage(response);
+}
+
+// Send quick reply
+function sendQuickReply(question) {
+    document.getElementById('chatInput').value = question;
+    sendMessage();
+}
+
+// Handle Enter key in chat input
+function handleChatKeypress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+// Initialize chatbot on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Show notification after 3 seconds
+    setTimeout(() => {
+        const notification = document.getElementById('chatNotification');
+        if (notification && !chatbotOpen) {
+            notification.classList.remove('hidden');
+        }
+    }, 3000);
+});
+
+console.log('%c🤖 Kaizen-chan Chatbot Loaded!', 'font-size: 14px; color: #ff0080;');
