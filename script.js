@@ -46,7 +46,7 @@ const ticketData = {
     combo: {
         name: 'COMBO PASS',
         nameJP: 'コンボパス',
-        price: 170,
+        price: 100,
         access: ['CINEMA', 'SNACKS', 'GAMING', 'FIFA', 'AFTERPARTY'],
         accessLabel: 'FULL ACCESS',
         features: [
@@ -1035,3 +1035,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('%c🤖 Kaizen-chan Chatbot Loaded!', 'font-size: 14px; color: #ff0080;');
+
