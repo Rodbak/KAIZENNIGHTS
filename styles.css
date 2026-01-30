@@ -2675,6 +2675,278 @@ body {
     color: var(--pure-white);
 }
 
+/* ===== FREE ENTRY & EXPERIENCES SECTION ===== */
+
+/* Free Entry Badge */
+.free-entry-badge {
+    background: linear-gradient(135deg, #00ff88, #00cc6a) !important;
+    color: #000 !important;
+    font-weight: bold;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.8); }
+}
+
+/* Free Entry Banner */
+.free-entry-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
+    border: 2px solid #00ff88;
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+    animation: border-glow 3s ease-in-out infinite;
+}
+
+@keyframes border-glow {
+    0%, 100% { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+    50% { border-color: #00cc6a; box-shadow: 0 0 40px rgba(0, 255, 136, 0.5); }
+}
+
+.free-entry-icon {
+    font-size: 3rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.free-entry-text h2 {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 1.8rem;
+    color: #00ff88;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.free-entry-text p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.3rem 0 0;
+    font-size: 1rem;
+}
+
+/* Experience Highlights (Hero) */
+.experience-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+}
+
+.exp-highlight {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    color: var(--off-white);
+    transition: all 0.3s ease;
+}
+
+.exp-highlight:hover {
+    background: rgba(231, 28, 35, 0.3);
+    border-color: var(--primary-red);
+    transform: scale(1.05);
+}
+
+/* Experiences Section */
+.experiences-section {
+    padding: 6rem 2rem;
+    background: linear-gradient(180deg, var(--deep-black) 0%, #0a0a15 50%, var(--deep-black) 100%);
+    position: relative;
+}
+
+.experiences-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Experience Card */
+.experience-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.experience-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-red);
+    box-shadow: 0 20px 40px rgba(231, 28, 35, 0.2);
+}
+
+.experience-card.featured-exp {
+    grid-column: span 1;
+    background: linear-gradient(135deg, rgba(231, 28, 35, 0.15), rgba(255, 100, 0, 0.1));
+    border-color: var(--primary-red);
+}
+
+/* Specific Card Styles */
+.arcade-card {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.1)) !important;
+    border-color: #8a2be2 !important;
+}
+
+.arcade-card:hover {
+    box-shadow: 0 20px 40px rgba(138, 43, 226, 0.3);
+}
+
+.gokart-card {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 50, 0, 0.1)) !important;
+    border-color: #ff6b00 !important;
+}
+
+.gokart-card:hover {
+    box-shadow: 0 20px 40px rgba(255, 107, 0, 0.3);
+}
+
+.movie-card {
+    background: linear-gradient(135deg, rgba(255, 0, 128, 0.15), rgba(139, 0, 139, 0.1));
+    border-color: rgba(255, 0, 128, 0.5);
+}
+
+.fifa-card {
+    background: linear-gradient(135deg, rgba(0, 150, 255, 0.15), rgba(0, 100, 200, 0.1));
+    border-color: rgba(0, 150, 255, 0.5);
+}
+
+.party-card {
+    background: linear-gradient(135deg, rgba(255, 0, 255, 0.15), rgba(128, 0, 128, 0.1));
+    border-color: rgba(255, 0, 255, 0.5);
+}
+
+.vendor-card-exp {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.15), rgba(255, 150, 0, 0.1));
+    border-color: rgba(255, 200, 0, 0.5);
+}
+
+.exp-card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, var(--primary-red), #ff6b00);
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.exp-card-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.exp-card-title {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.exp-card-desc {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.exp-card-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.exp-card-features span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.exp-card-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: #00ff88;
+    letter-spacing: 2px;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Free Entry Reminder */
+.free-entry-reminder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 200, 100, 0.05));
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 30px;
+    padding: 1rem 2rem;
+    margin-top: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reminder-icon {
+    font-size: 1.5rem;
+}
+
+.reminder-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+}
+
+.reminder-text strong {
+    color: #00ff88;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .free-entry-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 1rem;
+    }
+
+    .free-entry-text h2 {
+        font-size: 1.4rem;
+    }
+
+    .experiences-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-highlights {
+        gap: 0.5rem;
+    }
+
+    .exp-highlight {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
 /* ===== FOOTER CONTACT SECTION ===== */
 .footer-contact {
     margin: 2rem 0;

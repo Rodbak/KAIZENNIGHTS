@@ -779,7 +779,8 @@ const eventInfo = {
     mc: 'MC Amount',
     artists: ['Jaymore', 'Keli'],
     contact: '0530402249',
-    tickets: {
+    freeEntry: true,
+    passes: {
         movie: { name: 'Movie Pass', price: 100, includes: 'Movie screening, free popcorn & drink, after party access' },
         gaming: { name: 'Gaming Pass', price: 100, includes: 'Gaming zone access, FIFA tournament entry, after party access' },
         party: { name: 'Party Pass', price: 60, includes: 'After party access only' },
@@ -791,7 +792,13 @@ const eventInfo = {
         second: 'GHS 500',
         total: 'GHS 1,500'
     },
-    arcade: 'Pay-to-play arcade machines available on site!'
+    experiences: {
+        arcade: 'Pay-to-play arcade machines with retro games, racing simulators, and skill games!',
+        goKarts: 'Indoor go-kart racing track with timed laps and leaderboards!',
+        movie: 'Premium cinema experience with big screen, popcorn & drinks!',
+        fifa: 'EA FC 26 tournament with GHS 1,500 in prizes!',
+        party: 'After party with DJ Absolute, MC Amount, and live artists!'
+    }
 };
 
 // Chatbot state
@@ -804,7 +811,17 @@ function getChatbotResponse(message) {
     
     // Greetings
     if (lowerMsg.match(/^(hi|hello|hey|yo|sup|what's up|howdy|hola)/)) {
-        return `Konnichiwa! 👋✨ Welcome to Kaizen Nights! I'm Kaizen-chan, your anime event assistant! How can I help you today? Feel free to ask about tickets, the event, performers, or anything else!`;
+        return `Konnichiwa! 👋✨ Welcome to Kaizen Nights! I'm Kaizen-chan!\n\n🎉 **ENTRY IS FREE!** Just walk in and explore!\n\nWe have go-karts, arcade machines, movie screening, FIFA tournament, and an amazing after party! Ask me anything! 🏎️🕹️🎬`;
+    }
+    
+    // Free Entry
+    if (lowerMsg.includes('free') && (lowerMsg.includes('entry') || lowerMsg.includes('enter') || lowerMsg.includes('get in') || lowerMsg.includes('admission'))) {
+        return `🎉 **YES! ENTRY IS COMPLETELY FREE!**\n\nJust walk into Kaizen Nights and explore everything! You only pay for the experiences you want to enjoy:\n\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per play\n• 🎬 Movie - Movie Pass (GHS 100)\n• 🎮 FIFA Tournament - Gaming Pass (GHS 100)\n• 🎉 After Party - Free for pass holders!\n\nCome through and have fun! ✨`;
+    }
+    
+    // Go Karts
+    if (lowerMsg.includes('go kart') || lowerMsg.includes('gokart') || lowerMsg.includes('kart') || lowerMsg.includes('racing') || lowerMsg.includes('race')) {
+        return `🏎️ **GO KARTS!**\n\nYes! We have an indoor go-kart racing track!\n\n• 🏁 Race your friends\n• ⏱️ Timed laps\n• 🏆 Compete for the best time on our leaderboard!\n\nPay per race on site. Feel the adrenaline rush! 🔥\n\nEntry to Kaizen Nights is FREE - just come in and race!`;
     }
     
     // Date & Time
@@ -822,14 +839,14 @@ function getChatbotResponse(message) {
         return `🕙 The After Party starts at **${eventInfo.partyTime}**! Get ready to dance the night away with ${eventInfo.dj} and ${eventInfo.mc}! 💃🕺`;
     }
     
-    // Ticket prices
-    if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('how much') || lowerMsg.includes('ticket')) {
-        return `🎟️ Here are our ticket options:\n\n` +
+    // Ticket/Pass prices
+    if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('how much') || lowerMsg.includes('ticket') || lowerMsg.includes('pass')) {
+        return `🎉 **ENTRY IS FREE!** Just walk in!\n\nExperience passes for premium activities:\n\n` +
             `• **Movie Pass** - GHS 100\n  (Movie + popcorn + drink + after party)\n\n` +
             `• **Gaming Pass** - GHS 100\n  (Gaming + FIFA tournament + after party)\n\n` +
             `• **Party Pass** - GHS 60\n  (After party only)\n\n` +
             `• **Combo Pass** - GHS 170 ⭐ BEST VALUE!\n  (Everything included, save GHS 30!)\n\n` +
-            `Click the TICKETS section to get yours! 🎫`;
+            `🏎️ Go Karts & 🕹️ Arcade are pay-per-use on site!\n\nGet your passes in the PASSES section! 🎫`;
     }
     
     // Movie Pass specific
@@ -889,7 +906,7 @@ function getChatbotResponse(message) {
     
     // Arcade
     if (lowerMsg.includes('arcade') || lowerMsg.includes('machine') || lowerMsg.includes('games on site') || lowerMsg.includes('other games')) {
-        return `🕹️ **Arcade Machines!**\n\nYes! We have pay-to-play arcade machines available on site! 🎮\n\nCome enjoy some classic arcade gaming fun while you're at the event! Perfect for chilling between activities! 👾✨`;
+        return `🕹️ **ARCADE ZONE!**\n\nOur arcade is PACKED with awesome games!\n\n• 🎮 Retro arcade classics\n• 🏎️ Racing simulators\n• 🎯 Skill games & prizes\n• 👾 And much more!\n\nAll pay-to-play, so just come in (FREE entry!) and play what you like! Perfect for hanging out between the movie, races, and party! ✨`;
     }
     
     // Thanks
@@ -903,7 +920,7 @@ function getChatbotResponse(message) {
     }
     
     // Default response
-    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n• 📅 Event date & time\n• 📍 Venue location\n• 🎟️ Ticket prices\n• 🎤 Performing artists\n• 🏆 FIFA tournament\n• 🕹️ Arcade machines\n• 📞 Contact info\n\nJust ask me anything about Kaizen Nights! ✨`;
+    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n🎉 **ENTRY IS FREE!**\n\n• 🏎️ Go Karts\n• 🕹️ Arcade Zone\n• 🎬 Movie Screening\n• 🎮 FIFA Tournament\n• 🎉 After Party\n• 📅 Event Date\n• 📞 Contact Info\n\nJust ask me anything about Kaizen Nights! ✨`;
 }
 
 // Toggle chatbot window

@@ -71,9 +71,9 @@
             </a>
             <ul class="nav-links">
                 <li><a href="#home">HOME</a></li>
+                <li><a href="#experiences">EXPERIENCES</a></li>
+                <li><a href="#passes">PASSES</a></li>
                 <li><a href="#afterparty">PARTY</a></li>
-                <li><a href="#competition">FIFA</a></li>
-                <li><a href="#tickets">TICKETS</a></li>
                 <li><a href="#vendors">VENDORS</a></li>
             </ul>
         </div>
@@ -82,24 +82,35 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="hero-badge">次のイベント • NEXT EVENT</div>
+            <div class="hero-badge free-entry-badge">🎉 FREE ENTRY • 無料入場</div>
             <h1 class="hero-title">
                 <span class="title-main">KAIZEN</span>
                 <span class="title-sub">NIGHTS</span>
             </h1>
-            <p class="hero-tagline">映画の夜 • MOVIE & GAMING EXPERIENCE</p>
+            <p class="hero-tagline">究極の体験 • THE ULTIMATE EXPERIENCE</p>
             
-            <!-- Featured Movie Banner -->
-            <div class="featured-movie">
-                <div class="movie-badge">🎬 SCREENING</div>
-                <h2 class="movie-title">COMING SOON</h2>
-                <h3 class="movie-subtitle">MYSTERY MOVIE</h3>
-                <p class="movie-tagline">映画 • STAY TUNED FOR THE REVEAL</p>
+            <!-- Free Entry Highlight -->
+            <div class="free-entry-banner">
+                <div class="free-entry-icon">🎊</div>
+                <div class="free-entry-text">
+                    <h2>FREE ENTRY FOR EVERYONE!</h2>
+                    <p>Walk in, explore, and pay only for the experiences you want</p>
+                </div>
+            </div>
+            
+            <!-- Experience Highlights -->
+            <div class="experience-highlights">
+                <div class="exp-highlight">🏎️ Go Karts</div>
+                <div class="exp-highlight">🕹️ Arcade</div>
+                <div class="exp-highlight">🎬 Movie</div>
+                <div class="exp-highlight">🎮 FIFA</div>
+                <div class="exp-highlight">🎉 Party</div>
             </div>
             
             <p class="hero-description">
-                Experience the ultimate entertainment night! Watch an amazing movie screening, 
-                compete in our EA FC 26 tournament with GHS 1,500 in prizes, and party with DJ Absolute!
+                One night. Endless experiences. From go-karts and arcade machines to movie screenings, 
+                FIFA tournaments, and an epic after party - it's all here! Entry is FREE, 
+                get passes for your favorite experiences!
             </p>
             <div class="hero-date">
                 <div class="date-box">
@@ -111,15 +122,111 @@
                     <span class="date-value">ACADEMIC CITY UNIVERSITY</span>
                 </div>
             </div>
-            <a href="#tickets" class="cta-button">
-                <span class="cta-text">GET YOUR TICKETS</span>
-                <span class="cta-jp">チケットを購入</span>
+            <a href="#experiences" class="cta-button">
+                <span class="cta-text">EXPLORE EXPERIENCES</span>
+                <span class="cta-jp">体験を探索</span>
             </a>
         </div>
         <div class="hero-visual">
-            <div class="floating-card card-1">🎬</div>
-            <div class="floating-card card-2">🎮</div>
-            <div class="floating-card card-3">🍿</div>
+            <div class="floating-card card-1">🏎️</div>
+            <div class="floating-card card-2">🕹️</div>
+            <div class="floating-card card-3">🎬</div>
+        </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section id="experiences" class="experiences-section">
+        <div class="section-header">
+            <span class="section-jp">体験</span>
+            <h2 class="section-title">WHAT'S INSIDE</h2>
+            <p class="section-subtitle">All this under one roof - Entry is FREE!</p>
+        </div>
+
+        <div class="experiences-grid">
+            <!-- Arcade & Go Karts - Featured -->
+            <div class="experience-card featured-exp arcade-card">
+                <div class="exp-card-badge">🔥 FAN FAVORITE</div>
+                <div class="exp-card-icon">🕹️</div>
+                <h3 class="exp-card-title">ARCADE ZONE</h3>
+                <p class="exp-card-desc">Classic arcade machines, racing simulators, and endless fun! Pay-per-play.</p>
+                <div class="exp-card-features">
+                    <span>🎮 Retro Games</span>
+                    <span>🏎️ Racing Sims</span>
+                    <span>🎯 Skill Games</span>
+                </div>
+                <div class="exp-card-price">Pay to Play</div>
+            </div>
+
+            <div class="experience-card featured-exp gokart-card">
+                <div class="exp-card-badge">⚡ THRILL RIDE</div>
+                <div class="exp-card-icon">🏎️</div>
+                <h3 class="exp-card-title">GO KARTS</h3>
+                <p class="exp-card-desc">Race your friends on our indoor track! Feel the adrenaline rush!</p>
+                <div class="exp-card-features">
+                    <span>🏁 Race Track</span>
+                    <span>⏱️ Timed Laps</span>
+                    <span>🏆 Leaderboard</span>
+                </div>
+                <div class="exp-card-price">Pay to Race</div>
+            </div>
+
+            <!-- Movie Screening -->
+            <div class="experience-card movie-card">
+                <div class="exp-card-icon">🎬</div>
+                <h3 class="exp-card-title">MOVIE SCREENING</h3>
+                <p class="exp-card-desc">Premium cinema experience with free popcorn & drinks for pass holders.</p>
+                <div class="exp-card-features">
+                    <span>🎥 Big Screen</span>
+                    <span>🍿 Popcorn</span>
+                    <span>🥤 Drinks</span>
+                </div>
+                <div class="exp-card-price">Movie Pass Required</div>
+            </div>
+
+            <!-- FIFA Tournament -->
+            <div class="experience-card fifa-card">
+                <div class="exp-card-badge">💰 GHS 1,500 PRIZES</div>
+                <div class="exp-card-icon">🎮</div>
+                <h3 class="exp-card-title">FIFA TOURNAMENT</h3>
+                <p class="exp-card-desc">Compete in EA FC 26 knockout tournament. Win cash prizes!</p>
+                <div class="exp-card-features">
+                    <span>🥇 GHS 1,000</span>
+                    <span>🥈 GHS 500</span>
+                    <span>🏆 Trophy</span>
+                </div>
+                <div class="exp-card-price">Gaming Pass Required</div>
+            </div>
+
+            <!-- After Party -->
+            <div class="experience-card party-card">
+                <div class="exp-card-icon">🎉</div>
+                <h3 class="exp-card-title">AFTER PARTY</h3>
+                <p class="exp-card-desc">DJ Absolute, MC Amount, and live performances by Jaymore & Keli!</p>
+                <div class="exp-card-features">
+                    <span>🎧 DJ Absolute</span>
+                    <span>🎤 Live Artists</span>
+                    <span>💃 Dance Floor</span>
+                </div>
+                <div class="exp-card-price">Starts 10PM</div>
+            </div>
+
+            <!-- Food & Vendors -->
+            <div class="experience-card vendor-card-exp">
+                <div class="exp-card-icon">🍔</div>
+                <h3 class="exp-card-title">FOOD & DRINKS</h3>
+                <p class="exp-card-desc">Local vendors serving delicious food, drinks, and treats all night!</p>
+                <div class="exp-card-features">
+                    <span>🍕 Food Stalls</span>
+                    <span>🥤 Beverages</span>
+                    <span>🍦 Treats</span>
+                </div>
+                <div class="exp-card-price">Buy on Site</div>
+            </div>
+        </div>
+
+        <div class="free-entry-reminder">
+            <span class="reminder-icon">✨</span>
+            <span class="reminder-text">Remember: Entry to Kaizen Nights is <strong>FREE</strong>! Just walk in and explore!</span>
         </div>
     </section>
 
@@ -161,75 +268,23 @@
             </div>
             
             <p class="afterparty-note">
-                <strong>FREE for ALL ticket holders!</strong> 
+                <strong>FREE for ALL pass holders!</strong> 
                 Everyone gets to party!
             </p>
             
-            <a href="#tickets" class="cta-button afterparty-cta">
-                <span class="cta-text">GET YOUR TICKETS</span>
-                <span class="cta-jp">チケットを購入</span>
+            <a href="#passes" class="cta-button afterparty-cta">
+                <span class="cta-text">GET YOUR PASS</span>
+                <span class="cta-jp">パスを取得</span>
             </a>
         </div>
     </section>
 
-    <!-- FIFA Competition Section -->
-    <section id="competition" class="competition-section">
+    <!-- Passes Section -->
+    <section id="passes" class="tickets-section">
         <div class="section-header">
-            <span class="section-jp">FIFA大会</span>
-            <h2 class="section-title">FIFA COMPETITION</h2>
-            <p class="section-subtitle">Battle for glory and cash prizes!</p>
-        </div>
-        
-        <div class="competition-content">
-            <div class="trophy-display">
-                <div class="trophy-icon">🏆</div>
-                <div class="prize-pool">
-                    <span class="prize-label">TOTAL PRIZE POOL</span>
-                    <span class="prize-amount">GHS 1,500</span>
-                </div>
-            </div>
-            
-            <div class="prizes-container">
-                <div class="prize-card first-place">
-                    <div class="place-badge">🥇</div>
-                    <h3>1ST PLACE</h3>
-                    <div class="prize-value">GHS 1,000</div>
-                    <p>+ Trophy + Bragging Rights</p>
-                </div>
-                <div class="prize-card second-place">
-                    <div class="place-badge">🥈</div>
-                    <h3>2ND PLACE</h3>
-                    <div class="prize-value">GHS 500</div>
-                    <p>+ Medal</p>
-                </div>
-            </div>
-            
-            <div class="competition-info">
-                <div class="info-card">
-                    <span class="info-icon">🎮</span>
-                    <h4>GAME</h4>
-                    <p>EA FC 26</p>
-                </div>
-                <div class="info-card">
-                    <span class="info-icon">👥</span>
-                    <h4>FORMAT</h4>
-                    <p>Knockout Tournament</p>
-                </div>
-                <div class="info-card">
-                    <span class="info-icon">🎟️</span>
-                    <h4>ENTRY</h4>
-                    <p>Gaming or Combo Pass</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tickets Section -->
-    <section id="tickets" class="tickets-section">
-        <div class="section-header">
-            <span class="section-jp">チケット</span>
-            <h2 class="section-title">CHOOSE YOUR PASS</h2>
-            <p class="section-subtitle">Select the experience that fits your vibe</p>
+            <span class="section-jp">パス</span>
+            <h2 class="section-title">EXPERIENCE PASSES</h2>
+            <p class="section-subtitle">Entry is FREE! Get passes to unlock premium experiences</p>
         </div>
 
         <div class="tickets-container">
@@ -794,12 +849,12 @@
             </div>
             
             <div class="chatbot-quick-replies" id="quickReplies">
-                <button class="quick-reply" onclick="sendQuickReply('When is the event?')">📅 Event Date</button>
-                <button class="quick-reply" onclick="sendQuickReply('What are the ticket prices?')">🎟️ Prices</button>
-                <button class="quick-reply" onclick="sendQuickReply('Where is the venue?')">📍 Location</button>
-                <button class="quick-reply" onclick="sendQuickReply('What time does the party start?')">🕙 Party Time</button>
-                <button class="quick-reply" onclick="sendQuickReply('Who is performing?')">🎤 Artists</button>
+                <button class="quick-reply" onclick="sendQuickReply('Is entry free?')">🎉 Free Entry?</button>
+                <button class="quick-reply" onclick="sendQuickReply('Tell me about go karts')">🏎️ Go Karts</button>
                 <button class="quick-reply" onclick="sendQuickReply('Do you have arcade machines?')">🕹️ Arcade</button>
+                <button class="quick-reply" onclick="sendQuickReply('What are the pass prices?')">🎟️ Passes</button>
+                <button class="quick-reply" onclick="sendQuickReply('Who is performing?')">🎤 Artists</button>
+                <button class="quick-reply" onclick="sendQuickReply('When is the event?')">📅 Date</button>
                 <button class="quick-reply" onclick="sendQuickReply('How can I contact you?')">📞 Contact</button>
             </div>
             
