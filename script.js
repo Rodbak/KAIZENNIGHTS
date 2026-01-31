@@ -21,41 +21,14 @@ const ticketData = {
         name: 'MOVIE PASS',
         nameJP: '映画パス',
         price: 100,
-        access: ['CINEMA', 'SNACKS'],
-        accessLabel: 'Cinema + Snacks',
+        access: ['CINEMA', 'SNACKS', 'AFTERPARTY'],
+        accessLabel: 'Cinema + Snacks + Party',
         features: [
             'Movie Theater Entry',
             'Full Movie Screening',
             '1 Free Drink',
-            '1 Free Popcorn'
-        ]
-    },
-    gaming: {
-        name: 'GAMING PASS',
-        nameJP: 'ゲームパス',
-        price: 100,
-        access: ['GAMING', 'FIFA'],
-        accessLabel: 'Gaming + FIFA',
-        features: [
-            'Gaming Zone Access',
-            'Multiple Gaming Machines',
-            'FIFA Tournament Entry',
-            'Compete for GHS 1,500'
-        ]
-    },
-    combo: {
-        name: 'COMBO PASS',
-        nameJP: 'コンボパス',
-        price: 100,
-        access: ['CINEMA', 'SNACKS', 'GAMING', 'FIFA', 'AFTERPARTY'],
-        accessLabel: 'FULL ACCESS',
-        features: [
-            'Movie Theater Entry',
-            '1 Free Drink + Popcorn',
-            'Gaming Zone Access',
-            'FIFA Tournament Entry',
-            'After Party Access',
-            'SAVE GHS 30!'
+            '1 Free Popcorn',
+            'After Party Access'
         ]
     },
     party: {
@@ -67,7 +40,8 @@ const ticketData = {
         features: [
             'After Party Access',
             'Live DJ Performance',
-            'Dance Floor Access'
+            'Dance Floor Access',
+            'Live Artists Performance'
         ]
     },
     vendor: {
@@ -726,6 +700,109 @@ console.log('%c🎬 KAIZEN NIGHTS', 'font-size: 24px; font-weight: bold; color: 
 console.log('%cPowered by Paystack Payment Gateway', 'font-size: 12px; color: #888;');
 
 // ===========================================
+// COUNTDOWN TIMER
+// ===========================================
+
+function initCountdown() {
+    // Event date: February 6, 2026 at 7PM Ghana Time (GMT)
+    const eventDate = new Date('2026-02-06T19:00:00+00:00').getTime();
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+        
+        // Time calculations
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Update display
+        const daysEl = document.getElementById('countDays');
+        const hoursEl = document.getElementById('countHours');
+        const minutesEl = document.getElementById('countMinutes');
+        const secondsEl = document.getElementById('countSeconds');
+        
+        if (daysEl && hoursEl && minutesEl && secondsEl) {
+            daysEl.textContent = days.toString().padStart(2, '0');
+            hoursEl.textContent = hours.toString().padStart(2, '0');
+            minutesEl.textContent = minutes.toString().padStart(2, '0');
+            secondsEl.textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // If event has passed
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            if (daysEl) {
+                daysEl.textContent = '00';
+                hoursEl.textContent = '00';
+                minutesEl.textContent = '00';
+                secondsEl.textContent = '00';
+            }
+            const label = document.querySelector('.countdown-label');
+            if (label) {
+                label.textContent = '🎉 EVENT IS LIVE!';
+            }
+        }
+    }
+    
+    // Update immediately then every second
+    updateCountdown();
+    const countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+// Initialize countdown on page load
+document.addEventListener('DOMContentLoaded', initCountdown);
+
+// ===========================================
+// FLOATING CTA BUTTON
+// ===========================================
+
+function initFloatingCTA() {
+    const floatingCta = document.getElementById('floatingCta');
+    const heroSection = document.getElementById('home');
+    const passesSection = document.getElementById('passes');
+    
+    if (!floatingCta || !heroSection) return;
+    
+    function checkScroll() {
+        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+        const passesTop = passesSection ? passesSection.offsetTop : Infinity;
+        const passesBottom = passesSection ? passesSection.offsetTop + passesSection.offsetHeight : Infinity;
+        const scrollY = window.scrollY + window.innerHeight;
+        const currentScroll = window.scrollY;
+        
+        // Show floating CTA after hero section but hide when in passes section
+        const pastHero = currentScroll > heroBottom - 200;
+        const inPassesSection = currentScroll >= passesTop - 100 && currentScroll <= passesBottom + 100;
+        
+        if (pastHero && !inPassesSection) {
+            floatingCta.classList.add('visible');
+        } else {
+            floatingCta.classList.remove('visible');
+        }
+    }
+    
+    // Check on scroll with throttle
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                checkScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+    
+    // Initial check
+    checkScroll();
+}
+
+// Initialize floating CTA on page load
+document.addEventListener('DOMContentLoaded', initFloatingCTA);
+
+// ===========================================
 // JAPANESE DOOR PRELOADER
 // ===========================================
 
@@ -772,7 +849,7 @@ function playDoorSound() {
 // Event information for chatbot responses
 const eventInfo = {
     name: 'Kaizen Nights',
-    date: 'February 6, 2026',
+    date: 'February 6, 2026 at 7PM',
     venue: 'Academic City University',
     partyTime: '10PM',
     dj: 'DJ Absolute',
@@ -782,9 +859,7 @@ const eventInfo = {
     freeEntry: true,
     passes: {
         movie: { name: 'Movie Pass', price: 100, includes: 'Movie screening, free popcorn & drink, after party access' },
-        gaming: { name: 'Gaming Pass', price: 100, includes: 'Gaming zone access, FIFA tournament entry, after party access' },
         party: { name: 'Party Pass', price: 60, includes: 'After party access only' },
-        combo: { name: 'Combo Pass', price: 170, includes: 'Everything! Movie + Gaming + After Party (Save GHS 30!)' },
         vendor: { name: 'Vendor Spot', price: 200, includes: 'Prime location, table & setup space, social media promotion' }
     },
     prizes: {
@@ -795,8 +870,8 @@ const eventInfo = {
     experiences: {
         arcade: 'Pay-to-play arcade machines with retro games, racing simulators, and skill games!',
         goKarts: 'Indoor go-kart racing track with timed laps and leaderboards!',
-        movie: 'Premium cinema experience with big screen, popcorn & drinks!',
-        fifa: 'EA FC 26 tournament with GHS 1,500 in prizes!',
+        movie: 'SECRET MOVIE screening with big screen, popcorn & drinks! Title revealed at event!',
+        fifa: 'EA FC 26 tournament with GHS 1,500 in prizes - pay to enter on site!',
         party: 'After party with DJ Absolute, MC Amount, and live artists!'
     }
 };
@@ -816,7 +891,7 @@ function getChatbotResponse(message) {
     
     // Free Entry
     if (lowerMsg.includes('free') && (lowerMsg.includes('entry') || lowerMsg.includes('enter') || lowerMsg.includes('get in') || lowerMsg.includes('admission'))) {
-        return `🎉 **YES! ENTRY IS COMPLETELY FREE!**\n\nJust walk into Kaizen Nights and explore everything! You only pay for the experiences you want to enjoy:\n\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per play\n• 🎬 Movie - Movie Pass (GHS 100)\n• 🎮 FIFA Tournament - Gaming Pass (GHS 100)\n• 🎉 After Party - Free for pass holders!\n\nCome through and have fun! ✨`;
+        return `🎉 **YES! ENTRY IS COMPLETELY FREE!**\n\nJust walk into Kaizen Nights and explore everything! You only pay for the experiences you want to enjoy:\n\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per game\n• 🎬 Movie - Movie Pass (GHS 100)\n• 🎮 FIFA Tournament - Pay to enter on site\n• 🎉 After Party - Party Pass (GHS 60) or Movie Pass\n\nCome through and have fun! ✨`;
     }
     
     // Go Karts
@@ -825,8 +900,8 @@ function getChatbotResponse(message) {
     }
     
     // Date & Time
-    if (lowerMsg.includes('when') || lowerMsg.includes('date') || lowerMsg.includes('day')) {
-        return `📅 Kaizen Nights is happening on **${eventInfo.date}**! Mark your calendar and don't miss it! The after party starts at **${eventInfo.partyTime}** 🎉`;
+    if (lowerMsg.includes('when') || lowerMsg.includes('date') || lowerMsg.includes('day') || lowerMsg.includes('time') || lowerMsg.includes('start')) {
+        return `📅 Kaizen Nights is happening on **${eventInfo.date}**!\n\n🕖 Event starts at **7PM**\n🎉 After party starts at **${eventInfo.partyTime}**\n\nMark your calendar and don't miss it! ✨`;
     }
     
     // Location/Venue
@@ -841,27 +916,34 @@ function getChatbotResponse(message) {
     
     // Ticket/Pass prices
     if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('how much') || lowerMsg.includes('ticket') || lowerMsg.includes('pass')) {
-        return `🎉 **ENTRY IS FREE!** Just walk in!\n\nExperience passes for premium activities:\n\n` +
+        return `🎉 **ENTRY IS FREE!** Just walk in!\n\nExperience passes:\n\n` +
             `• **Movie Pass** - GHS 100\n  (Movie + popcorn + drink + after party)\n\n` +
-            `• **Gaming Pass** - GHS 100\n  (Gaming + FIFA tournament + after party)\n\n` +
             `• **Party Pass** - GHS 60\n  (After party only)\n\n` +
-            `• **Combo Pass** - GHS 170 ⭐ BEST VALUE!\n  (Everything included, save GHS 30!)\n\n` +
-            `🏎️ Go Karts & 🕹️ Arcade are pay-per-use on site!\n\nGet your passes in the PASSES section! 🎫`;
+            `🎮 **GAMES ARE PAY TO PLAY!**\n` +
+            `🏎️ Go Karts - Pay per race\n` +
+            `🕹️ Arcade - Pay per game\n` +
+            `⚽ FIFA Tournament - Register on site\n\n` +
+            `Get your passes in the PASSES section! 🎫`;
     }
     
     // Movie Pass specific
     if (lowerMsg.includes('movie pass') || (lowerMsg.includes('movie') && lowerMsg.includes('ticket'))) {
-        return `🎬 The **Movie Pass** is GHS 100 and includes:\n• Full movie screening\n• Free popcorn 🍿\n• Free drink 🥤\n• After party access!\n\nPerfect for film lovers! 🎥`;
+        return `🎬 The **Movie Pass** is GHS 100 and includes:\n• Full movie screening\n• Free popcorn 🍿\n• Free drink 🥤\n• After party access!\n\n🤫 **IT'S A SECRET MOVIE!** The title will be revealed at the event... but trust us, you won't want to miss it! 🔥`;
     }
     
-    // Gaming Pass specific
+    // Secret Movie / What movie
+    if (lowerMsg.includes('what movie') || lowerMsg.includes('which movie') || lowerMsg.includes('movie name') || lowerMsg.includes('secret movie') || lowerMsg.includes('film')) {
+        return `🤫 **IT'S A SECRET!**\n\nThe movie will be revealed at the event! All we can say is:\n\n🔥 Highly Requested\n⭐ Fan Favorite\n🎬 Premium Experience\n\nGet your **Movie Pass (GHS 100)** and find out! Trust us, you won't be disappointed! 🎥✨`;
+    }
+    
+    // Gaming/Arcade specific
     if (lowerMsg.includes('gaming pass') || lowerMsg.includes('gaming ticket') || lowerMsg.includes('gamer')) {
-        return `🎮 The **Gaming Pass** is GHS 100 and includes:\n• Gaming zone access\n• FIFA tournament entry\n• Chance to win GHS 1,500!\n• After party access!\n\n🕹️ Plus there are pay-to-play **arcade machines** on site too!\n\nAre you ready to compete? 🏆`;
+        return `🎮 **GAMES ARE PAY TO PLAY!**\n\nNo pass needed for games!\n\n• 🕹️ Arcade - Pay per game\n• 🏎️ Go Karts - Pay per race\n• ⚽ FIFA Tournament - Register on site\n\nJust walk in (FREE entry!) and pay for what you want to play! 🎯`;
     }
     
-    // Combo Pass specific
+    // Best value / what should I get
     if (lowerMsg.includes('combo') || lowerMsg.includes('full') || lowerMsg.includes('everything') || lowerMsg.includes('best')) {
-        return `⭐ The **Combo Pass** is our BEST VALUE at GHS 170!\n\nYou get EVERYTHING:\n• Movie screening 🎬\n• Free popcorn & drink 🍿🥤\n• Gaming zone access 🎮\n• FIFA tournament entry 🏆\n• After party access 🎉\n\nYou save GHS 30! It's the ultimate experience! 💫`;
+        return `✨ Here's what we recommend:\n\n🎬 **Movie Pass** (GHS 100) - Best for movie lovers!\n• Full movie screening\n• Free popcorn & drink\n• After party included!\n\n🎉 **Party Pass** (GHS 60) - Just want to party?\n• After party access\n• Live DJ & artists\n\n🎮 **Games are PAY TO PLAY** - No pass needed!\n• Arcade, Go Karts, FIFA - pay on site!\n\nWhat sounds good to you? 🌟`;
     }
     
     // Party Pass specific
@@ -871,7 +953,7 @@ function getChatbotResponse(message) {
     
     // FIFA/Competition
     if (lowerMsg.includes('fifa') || lowerMsg.includes('tournament') || lowerMsg.includes('competition') || lowerMsg.includes('prize')) {
-        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\nGet a Gaming Pass or Combo Pass to enter! May the best player win! 🎮⚽`;
+        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\n💰 **PAY TO ENTER** - Register on site at the event!\n\nMay the best player win! 🎮⚽`;
     }
     
     // Artists/Performers
@@ -920,7 +1002,7 @@ function getChatbotResponse(message) {
     }
     
     // Default response
-    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n🎉 **ENTRY IS FREE!**\n\n• 🏎️ Go Karts\n• 🕹️ Arcade Zone\n• 🎬 Movie Screening\n• 🎮 FIFA Tournament\n• 🎉 After Party\n• 📅 Event Date\n• 📞 Contact Info\n\nJust ask me anything about Kaizen Nights! ✨`;
+    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n🎉 **ENTRY IS FREE!**\n\n• 🏎️ Go Karts (Pay to Race)\n• 🕹️ Arcade Zone (Pay to Play)\n• 🎬 Movie Screening (Movie Pass)\n• 🎮 FIFA Tournament (Pay to Enter)\n• 🎉 After Party (Party Pass)\n• 📅 Event Date\n• 📞 Contact Info\n\nJust ask me anything about Kaizen Nights! ✨`;
 }
 
 // Toggle chatbot window
@@ -1035,4 +1117,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('%c🤖 Kaizen-chan Chatbot Loaded!', 'font-size: 14px; color: #ff0080;');
-

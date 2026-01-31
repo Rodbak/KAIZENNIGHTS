@@ -71,6 +71,8 @@
             </a>
             <ul class="nav-links">
                 <li><a href="#home">HOME</a></li>
+                <li><a href="#fifa">FIFA</a></li>
+                <li><a href="#movie">MOVIE</a></li>
                 <li><a href="#experiences">EXPERIENCES</a></li>
                 <li><a href="#passes">PASSES</a></li>
                 <li><a href="#afterparty">PARTY</a></li>
@@ -115,13 +117,40 @@
             <div class="hero-date">
                 <div class="date-box">
                     <span class="date-label">NEXT EVENT</span>
-                    <span class="date-value">FEB 6, 2026</span>
+                    <span class="date-value">FEB 6, 2026 • 7PM</span>
                 </div>
                 <div class="date-box">
                     <span class="date-label">VENUE</span>
                     <span class="date-value">ACADEMIC CITY UNIVERSITY</span>
                 </div>
             </div>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-container">
+                <div class="countdown-label">⏰ EVENT STARTS IN</div>
+                <div class="countdown-timer" id="countdownTimer">
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countDays">00</span>
+                        <span class="countdown-unit">DAYS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countHours">00</span>
+                        <span class="countdown-unit">HOURS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countMinutes">00</span>
+                        <span class="countdown-unit">MINS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countSeconds">00</span>
+                        <span class="countdown-unit">SECS</span>
+                    </div>
+                </div>
+            </div>
+            
             <a href="#experiences" class="cta-button">
                 <span class="cta-text">EXPLORE EXPERIENCES</span>
                 <span class="cta-jp">体験を探索</span>
@@ -131,6 +160,121 @@
             <div class="floating-card card-1">🏎️</div>
             <div class="floating-card card-2">🕹️</div>
             <div class="floating-card card-3">🎬</div>
+        </div>
+    </section>
+
+    <!-- FIFA Competition Section - Featured Higher -->
+    <section id="fifa" class="fifa-section">
+        <div class="section-header">
+            <span class="section-jp">FIFA大会</span>
+            <h2 class="section-title">FIFA COMPETITION</h2>
+            <p class="section-subtitle">Compete for GHS 1,500 in prizes!</p>
+        </div>
+        
+        <div class="fifa-content">
+            <div class="fifa-hero">
+                <div class="fifa-badge">🏆 EA FC 26 TOURNAMENT</div>
+                <div class="fifa-prizes">
+                    <div class="prize-item first">
+                        <span class="prize-medal">🥇</span>
+                        <span class="prize-label">1ST PLACE</span>
+                        <span class="prize-amount">GHS 1,000</span>
+                    </div>
+                    <div class="prize-item second">
+                        <span class="prize-medal">🥈</span>
+                        <span class="prize-label">2ND PLACE</span>
+                        <span class="prize-amount">GHS 500</span>
+                    </div>
+                </div>
+                <div class="fifa-total-prize">
+                    <span>TOTAL PRIZE POOL</span>
+                    <strong>GHS 1,500</strong>
+                </div>
+            </div>
+            
+            <div class="fifa-details">
+                <div class="fifa-detail-item">
+                    <span class="detail-icon">🎮</span>
+                    <h4>Knockout Format</h4>
+                    <p>Single elimination tournament</p>
+                </div>
+                <div class="fifa-detail-item">
+                    <span class="detail-icon">⚽</span>
+                    <h4>EA FC 26</h4>
+                    <p>Latest FIFA game</p>
+                </div>
+                <div class="fifa-detail-item">
+                    <span class="detail-icon">💰</span>
+                    <h4>Pay to Enter</h4>
+                    <p>Registration fee on site</p>
+                </div>
+            </div>
+            
+            <div class="fifa-cta">
+                <p class="fifa-note">⚡ Limited spots available! Register at the event.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movie Screening Section -->
+    <section id="movie" class="movie-section">
+        <div class="section-header">
+            <span class="section-jp">秘密映画</span>
+            <h2 class="section-title">SECRET MOVIE SCREENING</h2>
+            <p class="section-subtitle">The title stays hidden until showtime!</p>
+        </div>
+        
+        <div class="movie-content">
+            <div class="movie-mystery-card">
+                <div class="mystery-icon">
+                    <span class="mystery-question">?</span>
+                    <div class="film-reel"></div>
+                </div>
+                <div class="mystery-text">
+                    <h3>🤫 IT'S A SECRET!</h3>
+                    <p>The movie will be revealed at the event. All we can say is... <strong>you won't want to miss it!</strong></p>
+                </div>
+                <div class="mystery-hints">
+                    <span class="hint">🔥 Highly Requested</span>
+                    <span class="hint">⭐ Fan Favorite</span>
+                    <span class="hint">🎬 Premium Experience</span>
+                </div>
+            </div>
+            
+            <div class="movie-features">
+                <div class="movie-feature-item">
+                    <span class="feature-icon">🎥</span>
+                    <h4>Big Screen</h4>
+                    <p>Premium cinema setup</p>
+                </div>
+                <div class="movie-feature-item">
+                    <span class="feature-icon">🍿</span>
+                    <h4>Free Popcorn</h4>
+                    <p>Included with Movie Pass</p>
+                </div>
+                <div class="movie-feature-item">
+                    <span class="feature-icon">🥤</span>
+                    <h4>Free Drink</h4>
+                    <p>Included with Movie Pass</p>
+                </div>
+                <div class="movie-feature-item">
+                    <span class="feature-icon">🎉</span>
+                    <h4>After Party</h4>
+                    <p>FREE access included!</p>
+                </div>
+            </div>
+            
+            <div class="movie-cta">
+                <div class="movie-pass-promo">
+                    <span class="promo-label">MOVIE PASS</span>
+                    <span class="promo-price">GHS 100</span>
+                    <span class="promo-includes">Movie + Popcorn + Drink + After Party</span>
+                </div>
+                <a href="#passes" class="cta-button movie-cta-btn">
+                    <span class="cta-text">GET YOUR MOVIE PASS</span>
+                    <span class="cta-jp">映画パスを取得</span>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -145,29 +289,29 @@
         <div class="experiences-grid">
             <!-- Arcade & Go Karts - Featured -->
             <div class="experience-card featured-exp arcade-card">
-                <div class="exp-card-badge">🔥 FAN FAVORITE</div>
+                <div class="exp-card-badge">🔥 PAY TO PLAY</div>
                 <div class="exp-card-icon">🕹️</div>
                 <h3 class="exp-card-title">ARCADE ZONE</h3>
-                <p class="exp-card-desc">Classic arcade machines, racing simulators, and endless fun! Pay-per-play.</p>
+                <p class="exp-card-desc">Classic arcade machines, racing simulators, and endless fun! No pass needed - pay per game!</p>
                 <div class="exp-card-features">
                     <span>🎮 Retro Games</span>
                     <span>🏎️ Racing Sims</span>
                     <span>🎯 Skill Games</span>
                 </div>
-                <div class="exp-card-price">Pay to Play</div>
+                <div class="exp-card-price">Pay Per Game</div>
             </div>
 
             <div class="experience-card featured-exp gokart-card">
-                <div class="exp-card-badge">⚡ THRILL RIDE</div>
+                <div class="exp-card-badge">⚡ PAY TO RACE</div>
                 <div class="exp-card-icon">🏎️</div>
                 <h3 class="exp-card-title">GO KARTS</h3>
-                <p class="exp-card-desc">Race your friends on our indoor track! Feel the adrenaline rush!</p>
+                <p class="exp-card-desc">Race your friends on our indoor track! No pass needed - pay per race!</p>
                 <div class="exp-card-features">
                     <span>🏁 Race Track</span>
                     <span>⏱️ Timed Laps</span>
                     <span>🏆 Leaderboard</span>
                 </div>
-                <div class="exp-card-price">Pay to Race</div>
+                <div class="exp-card-price">Pay Per Race</div>
             </div>
 
             <!-- Movie Screening -->
@@ -183,20 +327,6 @@
                 <div class="exp-card-price">Movie Pass Required</div>
             </div>
 
-            <!-- FIFA Tournament -->
-            <div class="experience-card fifa-card">
-                <div class="exp-card-badge">💰 GHS 1,500 PRIZES</div>
-                <div class="exp-card-icon">🎮</div>
-                <h3 class="exp-card-title">FIFA TOURNAMENT</h3>
-                <p class="exp-card-desc">Compete in EA FC 26 knockout tournament. Win cash prizes!</p>
-                <div class="exp-card-features">
-                    <span>🥇 GHS 1,000</span>
-                    <span>🥈 GHS 500</span>
-                    <span>🏆 Trophy</span>
-                </div>
-                <div class="exp-card-price">Gaming Pass Required</div>
-            </div>
-
             <!-- After Party -->
             <div class="experience-card party-card">
                 <div class="exp-card-icon">🎉</div>
@@ -207,7 +337,7 @@
                     <span>🎤 Live Artists</span>
                     <span>💃 Dance Floor</span>
                 </div>
-                <div class="exp-card-price">Starts 10PM</div>
+                <div class="exp-card-price">Party Pass Required</div>
             </div>
 
             <!-- Food & Vendors -->
@@ -222,6 +352,12 @@
                 </div>
                 <div class="exp-card-price">Buy on Site</div>
             </div>
+        </div>
+
+        <!-- Pay to Play Note -->
+        <div class="pay-to-play-note">
+            <span class="note-icon">🎮</span>
+            <span class="note-text"><strong>Games & Go Karts are PAY TO PLAY!</strong> No pass needed - just walk in and pay for what you want to play!</span>
         </div>
 
         <div class="free-entry-reminder">
@@ -284,13 +420,22 @@
         <div class="section-header">
             <span class="section-jp">パス</span>
             <h2 class="section-title">EXPERIENCE PASSES</h2>
-            <p class="section-subtitle">Entry is FREE! Get passes to unlock premium experiences</p>
+            <p class="section-subtitle">Entry is FREE! Get passes for Movie & After Party</p>
         </div>
 
-        <div class="tickets-container">
+        <!-- Scarcity Banner -->
+        <div class="scarcity-banner">
+            <div class="scarcity-pulse"></div>
+            <span class="scarcity-icon">🔥</span>
+            <span class="scarcity-text"><strong>SELLING FAST!</strong> Limited passes available - Don't miss out!</span>
+            <span class="scarcity-icon">🔥</span>
+        </div>
+
+        <div class="tickets-container tickets-two-column">
             <!-- Movie Pass -->
             <div class="ticket-card demon-slayer-card" data-ticket="movie">
                 <div class="ticket-ribbon">MOVIE</div>
+                <div class="scarcity-badge">⚡ Only a few left!</div>
                 <div class="ds-pattern"></div>
                 <div class="ticket-header">
                     <span class="ticket-jp">映画パス</span>
@@ -314,68 +459,24 @@
                         <span class="feature-icon">✓</span>
                         1 Free Popcorn
                     </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Gaming Zone Access
-                    </li>
                     <li class="included">
                         <span class="feature-icon">✓</span>
                         After Party Access (FREE)
                     </li>
                 </ul>
                 <button class="ticket-btn" onclick="selectTicket('movie', 100)">
-                    SELECT PASS
-                </button>
-            </div>
-
-            <!-- Gaming Pass -->
-            <div class="ticket-card" data-ticket="gaming">
-                <div class="ticket-ribbon">GAMING</div>
-                <div class="ticket-header">
-                    <span class="ticket-jp">ゲームパス</span>
-                    <h3 class="ticket-name">GAMING PASS</h3>
-                </div>
-                <div class="ticket-price">
-                    <span class="currency">GHS</span>
-                    <span class="amount">100</span>
-                </div>
-                <ul class="ticket-features">
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Gaming Zone Access
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Multiple Gaming Machines
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        FIFA Tournament Entry
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Compete for GHS 1,500
-                    </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Movie Theater Access
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        After Party Access (FREE)
-                    </li>
-                </ul>
-                <button class="ticket-btn" onclick="selectTicket('gaming', 100)">
-                    SELECT PASS
+                    GET PASS NOW
                 </button>
             </div>
 
             <!-- Party Pass -->
             <div class="ticket-card" data-ticket="party">
                 <div class="ticket-ribbon">PARTY</div>
+                <div class="scarcity-badge">⚡ Selling fast!</div>
                 <div class="ticket-header">
                     <span class="ticket-jp">パーティーパス</span>
                     <h3 class="ticket-name">PARTY PASS</h3>
+                    <span class="movie-feature-tag">AFTER PARTY ONLY</span>
                 </div>
                 <div class="ticket-price">
                     <span class="currency">GHS</span>
@@ -394,66 +495,25 @@
                         <span class="feature-icon">✓</span>
                         Dance Floor Access
                     </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Movie Theater Access
-                    </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Gaming Zone Access
-                    </li>
-                    <li class="not-included">
-                        <span class="feature-icon">✗</span>
-                        Snacks & Drinks
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Live Artists Performance
                     </li>
                 </ul>
                 <button class="ticket-btn" onclick="selectTicket('party', 60)">
-                    SELECT PASS
+                    GET PASS NOW
                 </button>
             </div>
+        </div>
 
-            <!-- Combo Pass -->
-            <div class="ticket-card featured demon-slayer-card" data-ticket="combo">
-                <div class="ticket-ribbon">BEST VALUE</div>
-                <div class="ds-pattern"></div>
-                <div class="ticket-header">
-                    <span class="ticket-jp">コンボパス</span>
-                    <h3 class="ticket-name">COMBO PASS</h3>
-                    <span class="movie-feature-tag">FULL EXPERIENCE</span>
+        <!-- Games Pay to Play Notice -->
+        <div class="games-notice">
+            <div class="games-notice-content">
+                <span class="games-notice-icon">🎮</span>
+                <div class="games-notice-text">
+                    <h4>ARCADE & GO KARTS - PAY TO PLAY!</h4>
+                    <p>No pass needed for games! Just walk in and pay per game or race. FIFA Tournament registration is on-site.</p>
                 </div>
-                <div class="ticket-price">
-                    <span class="currency">GHS</span>
-                    <span class="amount">100</span>
-                </div>
-                <ul class="ticket-features">
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Full Movie Screening
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        1 Free Drink + Popcorn
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        Gaming Zone Access
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        FIFA Tournament Entry
-                    </li>
-                    <li class="included">
-                        <span class="feature-icon">✓</span>
-                        After Party Access (FREE)
-                    </li>
-                    <li class="included highlight-feature">
-                        <span class="feature-icon">★</span>
-                        SAVE GHS 30!
-                    </li>
-                </ul>
-                <button class="ticket-btn" onclick="selectTicket('combo', 170)">
-                    SELECT PASS
-                </button>
             </div>
         </div>
     </section>
@@ -745,7 +805,7 @@
                             </div>
                             <div class="receipt-row">
                                 <span>Date:</span>
-                                <span>FEB 6, 2026</span>
+                                <span>FEB 6, 2026 • 7PM</span>
                             </div>
                             <div class="receipt-row">
                                 <span>Pass:</span>
@@ -808,6 +868,15 @@
             <p class="footer-copy">© 2026 Strategy Lab. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Floating CTA Button -->
+    <div class="floating-cta" id="floatingCta">
+        <a href="#passes" class="floating-cta-btn">
+            <span class="floating-cta-icon">🎟️</span>
+            <span class="floating-cta-text">GET PASSES</span>
+            <span class="floating-cta-urgency">Limited!</span>
+        </a>
+    </div>
 
     <!-- Anime Chatbot -->
     <div class="chatbot-container" id="chatbot">

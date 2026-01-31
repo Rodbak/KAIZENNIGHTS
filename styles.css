@@ -3378,3 +3378,795 @@ body {
         height: 60px;
     }
 }
+
+/* ============================================
+   COUNTDOWN TIMER
+   ============================================ */
+
+.countdown-container {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.countdown-label {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--primary-red);
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    animation: pulseFade 2s ease-in-out infinite;
+}
+
+@keyframes pulseFade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    background: linear-gradient(135deg, rgba(231, 28, 35, 0.2), rgba(139, 0, 0, 0.3));
+    border: 2px solid var(--primary-red);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(231, 28, 35, 0.3);
+}
+
+.countdown-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--pure-white);
+    line-height: 1;
+}
+
+.countdown-unit {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    color: var(--light-gray);
+    letter-spacing: 2px;
+    margin-top: 0.25rem;
+}
+
+.countdown-separator {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--primary-red);
+    animation: blinkSeparator 1s ease-in-out infinite;
+}
+
+@keyframes blinkSeparator {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@media (max-width: 480px) {
+    .countdown-item {
+        min-width: 65px;
+        padding: 0.75rem 1rem;
+    }
+    
+    .countdown-value {
+        font-size: 1.8rem;
+    }
+    
+    .countdown-separator {
+        font-size: 1.5rem;
+    }
+}
+
+/* ============================================
+   SCARCITY ELEMENTS
+   ============================================ */
+
+.scarcity-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(90deg, rgba(231, 28, 35, 0.15), rgba(255, 107, 53, 0.15), rgba(231, 28, 35, 0.15));
+    border: 1px solid rgba(231, 28, 35, 0.4);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    animation: scarcityGlow 2s ease-in-out infinite;
+}
+
+@keyframes scarcityGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(231, 28, 35, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(231, 28, 35, 0.5);
+    }
+}
+
+.scarcity-pulse {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: scarcityPulse 3s ease-in-out infinite;
+}
+
+@keyframes scarcityPulse {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.scarcity-icon {
+    font-size: 1.5rem;
+    animation: scarcityBounce 1s ease-in-out infinite;
+}
+
+@keyframes scarcityBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.scarcity-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--pure-white);
+}
+
+.scarcity-text strong {
+    color: var(--primary-red);
+    font-weight: 700;
+}
+
+.scarcity-badge {
+    position: absolute;
+    top: 10px;
+    right: -35px;
+    background: linear-gradient(90deg, #FF6B35, #E71C23);
+    color: var(--pure-white);
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    padding: 0.4rem 2.5rem;
+    transform: rotate(45deg);
+    letter-spacing: 1px;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(231, 28, 35, 0.5);
+}
+
+.ticket-card {
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   FLOATING CTA BUTTON
+   ============================================ */
+
+.floating-cta {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-cta.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.floating-cta-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #E71C23, #8B0000);
+    color: var(--pure-white);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    box-shadow: 
+        0 10px 30px rgba(231, 28, 35, 0.4),
+        0 0 0 3px rgba(231, 28, 35, 0.2);
+    transition: all 0.3s ease;
+    animation: floatingPulse 2s ease-in-out infinite;
+}
+
+@keyframes floatingPulse {
+    0%, 100% { 
+        box-shadow: 
+            0 10px 30px rgba(231, 28, 35, 0.4),
+            0 0 0 3px rgba(231, 28, 35, 0.2);
+    }
+    50% { 
+        box-shadow: 
+            0 15px 40px rgba(231, 28, 35, 0.5),
+            0 0 0 6px rgba(231, 28, 35, 0.3);
+    }
+}
+
+.floating-cta-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 15px 40px rgba(231, 28, 35, 0.5),
+        0 0 0 6px rgba(231, 28, 35, 0.3);
+}
+
+.floating-cta-icon {
+    font-size: 1.3rem;
+}
+
+.floating-cta-text {
+    font-weight: bold;
+}
+
+.floating-cta-urgency {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    animation: urgencyBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes urgencyBlink {
+    0%, 100% { opacity: 1; background: rgba(255, 255, 255, 0.2); }
+    50% { opacity: 0.8; background: rgba(255, 255, 255, 0.3); }
+}
+
+@media (max-width: 480px) {
+    .floating-cta {
+        bottom: 80px;
+    }
+    
+    .floating-cta-btn {
+        padding: 0.85rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .scarcity-banner {
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
+    }
+    
+    .scarcity-text {
+        font-size: 0.85rem;
+    }
+    
+    .scarcity-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* ============================================
+   FIFA COMPETITION SECTION (continued)
+   ============================================ */
+
+.fifa-section {
+    padding: 6rem 5%;
+    background: linear-gradient(180deg, var(--rich-black) 0%, #0D0D0D 50%, var(--rich-black) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.fifa-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(231, 28, 35, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.fifa-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.fifa-hero {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(231, 28, 35, 0.15) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.fifa-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    color: #000;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+.fifa-prizes {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.prize-item {
+    text-align: center;
+    padding: 1.5rem 2.5rem;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prize-item.first {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.prize-item.second {
+    border-color: rgba(192, 192, 192, 0.5);
+    box-shadow: 0 0 30px rgba(192, 192, 192, 0.1);
+}
+
+.prize-medal {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.prize-label {
+    display: block;
+    font-family: var(--font-heading);
+    color: var(--light-gray);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.prize-amount {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--pure-white);
+    letter-spacing: 2px;
+}
+
+.prize-item.first .prize-amount {
+    color: #FFD700;
+}
+
+.prize-item.second .prize-amount {
+    color: #C0C0C0;
+}
+
+.fifa-total-prize {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fifa-total-prize span {
+    display: block;
+    font-family: var(--font-heading);
+    color: var(--light-gray);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.fifa-total-prize strong {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, #FFD700, #FF6B35, #E71C23);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fifa-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.fifa-detail-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.fifa-detail-item .detail-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.fifa-detail-item h4 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--pure-white);
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.fifa-detail-item p {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--light-gray);
+}
+
+.fifa-cta {
+    text-align: center;
+}
+
+.fifa-note {
+    display: inline-block;
+    background: rgba(231, 28, 35, 0.2);
+    border: 1px solid rgba(231, 28, 35, 0.3);
+    color: var(--pure-white);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+
+/* ============================================
+   SECRET MOVIE SCREENING SECTION
+   ============================================ */
+
+.movie-section {
+    padding: 6rem 5%;
+    background: linear-gradient(180deg, #0D0D0D 0%, #1a0a1a 50%, #0D0D0D 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.movie-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 30% 20%, rgba(231, 28, 35, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(121, 40, 202, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.movie-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.movie-mystery-card {
+    background: linear-gradient(135deg, rgba(231, 28, 35, 0.1) 0%, rgba(121, 40, 202, 0.1) 100%);
+    border: 2px solid rgba(231, 28, 35, 0.3);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.movie-mystery-card::before {
+    content: '🎬';
+    position: absolute;
+    font-size: 15rem;
+    opacity: 0.05;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mystery-icon {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mystery-question {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    color: var(--primary-red);
+    animation: mysterPulse 2s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(231, 28, 35, 0.5);
+}
+
+@keyframes mysterPulse {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.mystery-text h3 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--pure-white);
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+}
+
+.mystery-text p {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--off-white);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.mystery-text strong {
+    color: var(--primary-red);
+}
+
+.mystery-hints {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.mystery-hints .hint {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--off-white);
+}
+
+.movie-features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.movie-feature-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.movie-feature-item:hover {
+    transform: translateY(-5px);
+    border-color: rgba(231, 28, 35, 0.3);
+}
+
+.movie-feature-item .feature-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.movie-feature-item h4 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--pure-white);
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.movie-feature-item p {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--light-gray);
+}
+
+.movie-cta {
+    text-align: center;
+}
+
+.movie-pass-promo {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(231, 28, 35, 0.2), rgba(139, 0, 0, 0.2));
+    border: 2px solid var(--primary-red);
+    border-radius: 15px;
+    padding: 1.5rem 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.movie-pass-promo .promo-label {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--light-gray);
+    letter-spacing: 3px;
+    margin-bottom: 0.25rem;
+}
+
+.movie-pass-promo .promo-price {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--pure-white);
+}
+
+.movie-pass-promo .promo-includes {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--off-white);
+    margin-top: 0.5rem;
+}
+
+.movie-cta-btn {
+    display: inline-flex;
+}
+
+@media (max-width: 768px) {
+    .movie-features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .movie-mystery-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .mystery-question {
+        font-size: 4rem;
+    }
+    
+    .mystery-text h3 {
+        font-size: 1.5rem;
+    }
+    
+    .mystery-hints {
+        gap: 0.5rem;
+    }
+    
+    .mystery-hints .hint {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-features {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   PAY TO PLAY NOTICE
+   ============================================ */
+
+.pay-to-play-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(90deg, rgba(255, 107, 53, 0.2), rgba(231, 28, 35, 0.2));
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    padding: 1.25rem 2rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.pay-to-play-note .note-icon {
+    font-size: 1.5rem;
+}
+
+.pay-to-play-note .note-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--pure-white);
+}
+
+.pay-to-play-note .note-text strong {
+    color: #FF6B35;
+}
+
+/* ============================================
+   GAMES NOTICE IN PASSES SECTION
+   ============================================ */
+
+.games-notice {
+    max-width: 700px;
+    margin: 3rem auto 0;
+}
+
+.games-notice-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, rgba(121, 40, 202, 0.2), rgba(255, 0, 128, 0.2));
+    border: 2px solid rgba(255, 0, 128, 0.3);
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+}
+
+.games-notice-icon {
+    font-size: 2.5rem;
+}
+
+.games-notice-text h4 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: #ff0080;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.games-notice-text p {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--off-white);
+    line-height: 1.5;
+}
+
+/* ============================================
+   TWO COLUMN TICKET LAYOUT
+   ============================================ */
+
+.tickets-two-column {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .tickets-two-column {
+        grid-template-columns: 1fr;
+    }
+    
+    .fifa-prizes {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .fifa-hero {
+        padding: 2rem 1.5rem;
+    }
+    
+    .games-notice-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
