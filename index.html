@@ -91,6 +91,32 @@
             </h1>
             <p class="hero-tagline">究極の体験 • THE ULTIMATE EXPERIENCE</p>
             
+            <!-- Countdown Timer - Moved Higher -->
+            <div class="countdown-container">
+                <div class="countdown-label">⏰ EVENT STARTS IN</div>
+                <div class="countdown-timer" id="countdownTimer">
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countDays">00</span>
+                        <span class="countdown-unit">DAYS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countHours">00</span>
+                        <span class="countdown-unit">HOURS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countMinutes">00</span>
+                        <span class="countdown-unit">MINS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countSeconds">00</span>
+                        <span class="countdown-unit">SECS</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Free Entry Highlight -->
             <div class="free-entry-banner">
                 <div class="free-entry-icon">🎊</div>
@@ -122,32 +148,6 @@
                 <div class="date-box">
                     <span class="date-label">VENUE</span>
                     <span class="date-value">ACADEMIC CITY UNIVERSITY</span>
-                </div>
-            </div>
-            
-            <!-- Countdown Timer -->
-            <div class="countdown-container">
-                <div class="countdown-label">⏰ EVENT STARTS IN</div>
-                <div class="countdown-timer" id="countdownTimer">
-                    <div class="countdown-item">
-                        <span class="countdown-value" id="countDays">00</span>
-                        <span class="countdown-unit">DAYS</span>
-                    </div>
-                    <div class="countdown-separator">:</div>
-                    <div class="countdown-item">
-                        <span class="countdown-value" id="countHours">00</span>
-                        <span class="countdown-unit">HOURS</span>
-                    </div>
-                    <div class="countdown-separator">:</div>
-                    <div class="countdown-item">
-                        <span class="countdown-value" id="countMinutes">00</span>
-                        <span class="countdown-unit">MINS</span>
-                    </div>
-                    <div class="countdown-separator">:</div>
-                    <div class="countdown-item">
-                        <span class="countdown-value" id="countSeconds">00</span>
-                        <span class="countdown-unit">SECS</span>
-                    </div>
                 </div>
             </div>
             
@@ -204,14 +204,18 @@
                     <p>Latest FIFA game</p>
                 </div>
                 <div class="fifa-detail-item">
-                    <span class="detail-icon">💰</span>
-                    <h4>Pay to Enter</h4>
-                    <p>Registration fee on site</p>
+                    <span class="detail-icon">🎟️</span>
+                    <h4>Gaming Pass</h4>
+                    <p>GHS 120 to compete</p>
                 </div>
             </div>
             
             <div class="fifa-cta">
-                <p class="fifa-note">⚡ Limited spots available! Register at the event.</p>
+                <a href="#passes" class="cta-button fifa-cta-btn">
+                    <span class="cta-text">GET GAMING PASS - GHS 120</span>
+                    <span class="cta-jp">ゲームパスを取得</span>
+                </a>
+                <p class="fifa-note">⚡ Limited spots available! Get your pass now.</p>
             </div>
         </div>
     </section>
@@ -431,7 +435,7 @@
             <span class="scarcity-icon">🔥</span>
         </div>
 
-        <div class="tickets-container tickets-two-column">
+        <div class="tickets-container tickets-three-column">
             <!-- Movie Pass -->
             <div class="ticket-card demon-slayer-card" data-ticket="movie">
                 <div class="ticket-ribbon">MOVIE</div>
@@ -465,6 +469,42 @@
                     </li>
                 </ul>
                 <button class="ticket-btn" onclick="selectTicket('movie', 100)">
+                    GET PASS NOW
+                </button>
+            </div>
+
+            <!-- Gaming Pass - FIFA Competition -->
+            <div class="ticket-card fifa-pass-card" data-ticket="gaming">
+                <div class="ticket-ribbon">FIFA</div>
+                <div class="scarcity-badge">🏆 Win GHS 1,500!</div>
+                <div class="ticket-header">
+                    <span class="ticket-jp">ゲームパス</span>
+                    <h3 class="ticket-name">GAMING PASS</h3>
+                    <span class="movie-feature-tag">FIFA COMPETITION</span>
+                </div>
+                <div class="ticket-price">
+                    <span class="currency">GHS</span>
+                    <span class="amount">120</span>
+                </div>
+                <ul class="ticket-features">
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        FIFA Tournament Entry
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        Compete for GHS 1,500
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        EA FC 26 Knockout
+                    </li>
+                    <li class="included">
+                        <span class="feature-icon">✓</span>
+                        After Party Access (FREE)
+                    </li>
+                </ul>
+                <button class="ticket-btn" onclick="selectTicket('gaming', 120)">
                     GET PASS NOW
                 </button>
             </div>
@@ -512,7 +552,7 @@
                 <span class="games-notice-icon">🎮</span>
                 <div class="games-notice-text">
                     <h4>ARCADE & GO KARTS - PAY TO PLAY!</h4>
-                    <p>No pass needed for games! Just walk in and pay per game or race. FIFA Tournament registration is on-site.</p>
+                    <p>No pass needed for arcade games! Just walk in and pay per game or race.</p>
                 </div>
             </div>
         </div>

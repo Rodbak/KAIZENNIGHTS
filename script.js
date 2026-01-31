@@ -31,6 +31,19 @@ const ticketData = {
             'After Party Access'
         ]
     },
+    gaming: {
+        name: 'GAMING PASS',
+        nameJP: 'ゲームパス',
+        price: 120,
+        access: ['FIFA', 'AFTERPARTY'],
+        accessLabel: 'FIFA Tournament + Party',
+        features: [
+            'FIFA Tournament Entry',
+            'Compete for GHS 1,500',
+            'EA FC 26 Knockout',
+            'After Party Access'
+        ]
+    },
     party: {
         name: 'PARTY PASS',
         nameJP: 'パーティーパス',
@@ -859,6 +872,7 @@ const eventInfo = {
     freeEntry: true,
     passes: {
         movie: { name: 'Movie Pass', price: 100, includes: 'Movie screening, free popcorn & drink, after party access' },
+        gaming: { name: 'Gaming Pass', price: 120, includes: 'FIFA tournament entry, compete for GHS 1,500, after party access' },
         party: { name: 'Party Pass', price: 60, includes: 'After party access only' },
         vendor: { name: 'Vendor Spot', price: 200, includes: 'Prime location, table & setup space, social media promotion' }
     },
@@ -891,7 +905,7 @@ function getChatbotResponse(message) {
     
     // Free Entry
     if (lowerMsg.includes('free') && (lowerMsg.includes('entry') || lowerMsg.includes('enter') || lowerMsg.includes('get in') || lowerMsg.includes('admission'))) {
-        return `🎉 **YES! ENTRY IS COMPLETELY FREE!**\n\nJust walk into Kaizen Nights and explore everything! You only pay for the experiences you want to enjoy:\n\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per game\n• 🎬 Movie - Movie Pass (GHS 100)\n• 🎮 FIFA Tournament - Pay to enter on site\n• 🎉 After Party - Party Pass (GHS 60) or Movie Pass\n\nCome through and have fun! ✨`;
+        return `🎉 **YES! ENTRY IS COMPLETELY FREE!**\n\nJust walk into Kaizen Nights and explore everything! You only pay for the experiences you want to enjoy:\n\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per game\n• 🎬 Movie - Movie Pass (GHS 100)\n• 🎮 FIFA Tournament - Gaming Pass (GHS 120)\n• 🎉 After Party - Party Pass (GHS 60)\n\nCome through and have fun! ✨`;
     }
     
     // Go Karts
@@ -918,11 +932,11 @@ function getChatbotResponse(message) {
     if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('how much') || lowerMsg.includes('ticket') || lowerMsg.includes('pass')) {
         return `🎉 **ENTRY IS FREE!** Just walk in!\n\nExperience passes:\n\n` +
             `• **Movie Pass** - GHS 100\n  (Movie + popcorn + drink + after party)\n\n` +
+            `• **Gaming Pass** - GHS 120 🏆\n  (FIFA tournament + compete for GHS 1,500 + after party)\n\n` +
             `• **Party Pass** - GHS 60\n  (After party only)\n\n` +
-            `🎮 **GAMES ARE PAY TO PLAY!**\n` +
+            `🎮 **Arcade & Go Karts are PAY TO PLAY!**\n` +
             `🏎️ Go Karts - Pay per race\n` +
-            `🕹️ Arcade - Pay per game\n` +
-            `⚽ FIFA Tournament - Register on site\n\n` +
+            `🕹️ Arcade - Pay per game\n\n` +
             `Get your passes in the PASSES section! 🎫`;
     }
     
@@ -936,14 +950,14 @@ function getChatbotResponse(message) {
         return `🤫 **IT'S A SECRET!**\n\nThe movie will be revealed at the event! All we can say is:\n\n🔥 Highly Requested\n⭐ Fan Favorite\n🎬 Premium Experience\n\nGet your **Movie Pass (GHS 100)** and find out! Trust us, you won't be disappointed! 🎥✨`;
     }
     
-    // Gaming/Arcade specific
+    // Gaming Pass specific
     if (lowerMsg.includes('gaming pass') || lowerMsg.includes('gaming ticket') || lowerMsg.includes('gamer')) {
-        return `🎮 **GAMES ARE PAY TO PLAY!**\n\nNo pass needed for games!\n\n• 🕹️ Arcade - Pay per game\n• 🏎️ Go Karts - Pay per race\n• ⚽ FIFA Tournament - Register on site\n\nJust walk in (FREE entry!) and pay for what you want to play! 🎯`;
+        return `🎮 The **Gaming Pass** is GHS 120 and includes:\n\n• 🏆 FIFA Tournament Entry\n• 💰 Compete for GHS 1,500 in prizes!\n• ⚽ EA FC 26 Knockout Format\n• 🎉 After Party Access (FREE!)\n\n🥇 1st Place: GHS 1,000\n🥈 2nd Place: GHS 500\n\nAre you ready to compete? Get your Gaming Pass now! 🔥`;
     }
     
     // Best value / what should I get
     if (lowerMsg.includes('combo') || lowerMsg.includes('full') || lowerMsg.includes('everything') || lowerMsg.includes('best')) {
-        return `✨ Here's what we recommend:\n\n🎬 **Movie Pass** (GHS 100) - Best for movie lovers!\n• Full movie screening\n• Free popcorn & drink\n• After party included!\n\n🎉 **Party Pass** (GHS 60) - Just want to party?\n• After party access\n• Live DJ & artists\n\n🎮 **Games are PAY TO PLAY** - No pass needed!\n• Arcade, Go Karts, FIFA - pay on site!\n\nWhat sounds good to you? 🌟`;
+        return `✨ Here's what we recommend:\n\n🎬 **Movie Pass** (GHS 100) - Best for movie lovers!\n• Full movie screening\n• Free popcorn & drink\n• After party included!\n\n🎮 **Gaming Pass** (GHS 120) - For FIFA champions!\n• FIFA tournament entry\n• Win up to GHS 1,500!\n• After party included!\n\n🎉 **Party Pass** (GHS 60) - Just want to party?\n• After party access\n• Live DJ & artists\n\n🕹️ Arcade & Go Karts are pay-to-play on site!\n\nWhat sounds good to you? 🌟`;
     }
     
     // Party Pass specific
@@ -953,7 +967,7 @@ function getChatbotResponse(message) {
     
     // FIFA/Competition
     if (lowerMsg.includes('fifa') || lowerMsg.includes('tournament') || lowerMsg.includes('competition') || lowerMsg.includes('prize')) {
-        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\n💰 **PAY TO ENTER** - Register on site at the event!\n\nMay the best player win! 🎮⚽`;
+        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\n🎮 **Gaming Pass Required** - GHS 120\nIncludes tournament entry + after party access!\n\nMay the best player win! ⚽🔥`;
     }
     
     // Artists/Performers

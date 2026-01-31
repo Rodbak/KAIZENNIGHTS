@@ -4151,8 +4151,47 @@ body {
     margin: 0 auto;
 }
 
+.tickets-three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* FIFA Pass Card Special Styling */
+.fifa-pass-card {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(231, 28, 35, 0.1));
+    border: 2px solid rgba(255, 215, 0, 0.4);
+}
+
+.fifa-pass-card:hover {
+    border-color: rgba(255, 215, 0, 0.7);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.fifa-pass-card .ticket-ribbon {
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    color: #000;
+}
+
+.fifa-pass-card .scarcity-badge {
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    color: #000;
+}
+
+@media (max-width: 992px) {
+    .tickets-three-column {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .tickets-two-column {
+        grid-template-columns: 1fr;
+    }
+    
+    .tickets-three-column {
         grid-template-columns: 1fr;
     }
     
