@@ -17,44 +17,17 @@ let paymentReference = null;
 
 // Ticket Data with Access Levels
 const ticketData = {
-    movie: {
-        name: 'MOVIE PASS',
-        nameJP: '映画パス',
-        price: 100,
-        access: ['CINEMA', 'SNACKS', 'AFTERPARTY'],
-        accessLabel: 'Cinema + Snacks + Party',
-        features: [
-            'Movie Theater Entry',
-            'Full Movie Screening',
-            '1 Free Drink',
-            '1 Free Popcorn',
-            'After Party Access'
-        ]
-    },
     gaming: {
         name: 'GAMING PASS',
         nameJP: 'ゲームパス',
         price: 120,
-        access: ['FIFA', 'AFTERPARTY'],
-        accessLabel: 'FIFA Tournament + Party',
+        access: ['FIFA', 'CINEMA', 'AFTERPARTY'],
+        accessLabel: 'FIFA Tournament + All Free Experiences',
         features: [
             'FIFA Tournament Entry',
             'Compete for GHS 1,500',
             'EA FC 26 Knockout',
-            'After Party Access'
-        ]
-    },
-    party: {
-        name: 'PARTY PASS',
-        nameJP: 'パーティーパス',
-        price: 60,
-        access: ['AFTERPARTY'],
-        accessLabel: 'After Party Only',
-        features: [
-            'After Party Access',
-            'Live DJ Performance',
-            'Dance Floor Access',
-            'Live Artists Performance'
+            'All Free Experiences Included'
         ]
     },
     vendor: {
@@ -816,6 +789,137 @@ function initFloatingCTA() {
 document.addEventListener('DOMContentLoaded', initFloatingCTA);
 
 // ===========================================
+// WAITLIST FORM HANDLER
+// ===========================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const waitlistForm = document.getElementById('waitlistForm');
+    
+    if (waitlistForm) {
+        waitlistForm.addEventListener('submit', handleWaitlistSubmit);
+    }
+});
+
+function handleWaitlistSubmit(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('waitlistName').value.trim();
+    const email = document.getElementById('waitlistEmail').value.trim();
+    const phone = document.getElementById('waitlistPhone').value.trim();
+    
+    // Validate
+    if (!name || !email || !phone) {
+        showError('Please fill in all fields');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showError('Please enter a valid email address');
+        return;
+    }
+    
+    if (phone.length < 10) {
+        showError('Please enter a valid phone number');
+        return;
+    }
+    
+    // Show loading
+    const btn = waitlistForm.querySelector('.waitlist-btn');
+    const btnText = btn.querySelector('.btn-text');
+    const btnLoader = btn.querySelector('.btn-loader');
+    
+    btn.disabled = true;
+    btnText.classList.add('hidden');
+    btnLoader.classList.remove('hidden');
+    
+    // Generate waitlist reference
+    const waitlistRef = 'WL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    
+    // Store in localStorage
+    const waitlistData = {
+        ref: waitlistRef,
+        name: name,
+        email: email,
+        phone: phone,
+        registeredAt: new Date().toISOString(),
+        event: 'KAIZEN NIGHTS',
+        date: '2026-02-06',
+        experiences: ['Movie Screening', 'After Party']
+    };
+    
+    const waitlist = JSON.parse(localStorage.getItem('kaizenWaitlist') || '[]');
+    waitlist.push(waitlistData);
+    localStorage.setItem('kaizenWaitlist', JSON.stringify(waitlist));
+    
+    // Simulate API call delay
+    setTimeout(() => {
+        // Reset button
+        btn.disabled = false;
+        btnText.classList.remove('hidden');
+        btnLoader.classList.add('hidden');
+        
+        // Clear form
+        waitlistForm.reset();
+        
+        // Show success modal
+        showWaitlistSuccess(waitlistData);
+        
+        console.log('Waitlist registration:', waitlistData);
+    }, 1500);
+}
+
+function showWaitlistSuccess(data) {
+    // Create success modal
+    const modal = document.createElement('div');
+    modal.className = 'waitlist-success-modal';
+    modal.innerHTML = `
+        <div class="waitlist-success-content">
+            <div class="success-icon">✓</div>
+            <h3>YOU'RE ON THE LIST!</h3>
+            <p class="success-subtitle">See you at Kaizen Nights! 🎉</p>
+            
+            <div class="success-details">
+                <div class="detail-row">
+                    <span>Name:</span>
+                    <strong>${data.name}</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Reference:</span>
+                    <strong class="ref-code">${data.ref}</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Event:</span>
+                    <strong>FEB 6, 2026 • 7PM</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Access:</span>
+                    <strong>Movie + After Party (FREE)</strong>
+                </div>
+            </div>
+            
+            <div class="success-note">
+                <p>📱 Screenshot this confirmation!</p>
+                <p>📧 Confirmation sent to ${data.email}</p>
+                <p>💬 We'll reach out via WhatsApp</p>
+            </div>
+            
+            <button class="close-success-btn" onclick="this.closest('.waitlist-success-modal').remove()">
+                GOT IT!
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+        modal.classList.add('active');
+    });
+    
+    showSuccess('You\'re on the waitlist! 🎉');
+}
+
+// ===========================================
 // JAPANESE DOOR PRELOADER
 // ===========================================
 
@@ -871,11 +975,10 @@ const eventInfo = {
     contact: '0530402249',
     freeEntry: true,
     passes: {
-        movie: { name: 'Movie Pass', price: 100, includes: 'Movie screening, free popcorn & drink, after party access' },
-        gaming: { name: 'Gaming Pass', price: 120, includes: 'FIFA tournament entry, compete for GHS 1,500, after party access' },
-        party: { name: 'Party Pass', price: 60, includes: 'After party access only' },
+        gaming: { name: 'Gaming Pass', price: 120, includes: 'FIFA tournament entry, compete for GHS 1,500, all free experiences included' },
         vendor: { name: 'Vendor Spot', price: 200, includes: 'Prime location, table & setup space, social media promotion' }
     },
+    freeExperiences: ['Movie Screening', 'After Party', 'Entry'],
     prizes: {
         first: 'GHS 1,000',
         second: 'GHS 500',
@@ -900,12 +1003,12 @@ function getChatbotResponse(message) {
     
     // Greetings
     if (lowerMsg.match(/^(hi|hello|hey|yo|sup|what's up|howdy|hola)/)) {
-        return `Konnichiwa! 👋✨ Welcome to Kaizen Nights! I'm Kaizen-chan!\n\n🎉 **ENTRY IS FREE!** Just walk in and explore!\n\nWe have go-karts, arcade machines, movie screening, FIFA tournament, and an amazing after party! Ask me anything! 🏎️🕹️🎬`;
+        return `Konnichiwa! 👋✨ Welcome to Kaizen Nights! I'm Kaizen-chan!\n\n🎉 **EVERYTHING IS FREE!** Movie & Party are FREE!\n\nJust join the waitlist! Arcade is pay-to-play, and FIFA tournament requires a Gaming Pass (GHS 120). Ask me anything! 🏎️🕹️🎬`;
     }
     
     // Free Entry
     if (lowerMsg.includes('free') && (lowerMsg.includes('entry') || lowerMsg.includes('enter') || lowerMsg.includes('get in') || lowerMsg.includes('admission'))) {
-        return `🎉 **YES! ENTRY IS COMPLETELY FREE!**\n\nJust walk into Kaizen Nights and explore everything! You only pay for the experiences you want to enjoy:\n\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per game\n• 🎬 Movie - Movie Pass (GHS 100)\n• 🎮 FIFA Tournament - Gaming Pass (GHS 120)\n• 🎉 After Party - Party Pass (GHS 60)\n\nCome through and have fun! ✨`;
+        return `🎉 **EVERYTHING IS FREE!**\n\n✅ **FREE:**\n• 🎬 Movie Screening\n• 🎉 After Party\n• 🚪 Entry\n\nJust join the waitlist to secure your spot!\n\n💰 **Pay to Play:**\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per game\n• 🎮 FIFA Tournament - Gaming Pass (GHS 120)\n\nJoin the waitlist now! ✨`;
     }
     
     // Go Karts
@@ -930,44 +1033,37 @@ function getChatbotResponse(message) {
     
     // Ticket/Pass prices
     if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('how much') || lowerMsg.includes('ticket') || lowerMsg.includes('pass')) {
-        return `🎉 **ENTRY IS FREE!** Just walk in!\n\nExperience passes:\n\n` +
-            `• **Movie Pass** - GHS 100\n  (Movie + popcorn + drink + after party)\n\n` +
-            `• **Gaming Pass** - GHS 120 🏆\n  (FIFA tournament + compete for GHS 1,500 + after party)\n\n` +
-            `• **Party Pass** - GHS 60\n  (After party only)\n\n` +
-            `🎮 **Arcade & Go Karts are PAY TO PLAY!**\n` +
-            `🏎️ Go Karts - Pay per race\n` +
-            `🕹️ Arcade - Pay per game\n\n` +
-            `Get your passes in the PASSES section! 🎫`;
+        return `🎉 **EVERYTHING IS FREE!**\n\n✅ **FREE (Join Waitlist):**\n• 🎬 Movie Screening\n• 🎉 After Party\n• 🚪 Entry\n\n💰 **Only Paid Experience:**\n• **Gaming Pass** - GHS 120 🏆\n  (FIFA tournament + compete for GHS 1,500!)\n\n🎮 **Pay to Play on Site:**\n• 🏎️ Go Karts - Pay per race\n• 🕹️ Arcade - Pay per game\n\nJoin the waitlist to secure your FREE spot! 🎫`;
     }
     
-    // Movie Pass specific
+    // Movie specific
     if (lowerMsg.includes('movie pass') || (lowerMsg.includes('movie') && lowerMsg.includes('ticket'))) {
-        return `🎬 The **Movie Pass** is GHS 100 and includes:\n• Full movie screening\n• Free popcorn 🍿\n• Free drink 🥤\n• After party access!\n\n🤫 **IT'S A SECRET MOVIE!** The title will be revealed at the event... but trust us, you won't want to miss it! 🔥`;
+        return `🎬 **MOVIE SCREENING IS FREE!**\n\nJust join the waitlist to secure your spot!\n\n• Secret movie screening 🤫\n• Premium cinema setup\n• Snacks & drinks available on site\n• After party also FREE!\n\nJoin the waitlist now! ✨`;
     }
     
     // Secret Movie / What movie
     if (lowerMsg.includes('what movie') || lowerMsg.includes('which movie') || lowerMsg.includes('movie name') || lowerMsg.includes('secret movie') || lowerMsg.includes('film')) {
-        return `🤫 **IT'S A SECRET!**\n\nThe movie will be revealed at the event! All we can say is:\n\n🔥 Highly Requested\n⭐ Fan Favorite\n🎬 Premium Experience\n\nGet your **Movie Pass (GHS 100)** and find out! Trust us, you won't be disappointed! 🎥✨`;
+        return `🤫 **IT'S A SECRET!**\n\nThe movie will be revealed at the event! All we can say is:\n\n🔥 Highly Requested\n⭐ Fan Favorite\n🎬 Premium Experience\n\n**And it's FREE!** Just join the waitlist to secure your spot! 🎥✨`;
     }
     
     // Gaming Pass specific
     if (lowerMsg.includes('gaming pass') || lowerMsg.includes('gaming ticket') || lowerMsg.includes('gamer')) {
-        return `🎮 The **Gaming Pass** is GHS 120 and includes:\n\n• 🏆 FIFA Tournament Entry\n• 💰 Compete for GHS 1,500 in prizes!\n• ⚽ EA FC 26 Knockout Format\n• 🎉 After Party Access (FREE!)\n\n🥇 1st Place: GHS 1,000\n🥈 2nd Place: GHS 500\n\nAre you ready to compete? Get your Gaming Pass now! 🔥`;
+        return `🎮 The **Gaming Pass** is GHS 120 and includes:\n\n• 🏆 FIFA Tournament Entry\n• 💰 Compete for GHS 1,500 in prizes!\n• ⚽ EA FC 26 Knockout Format\n• ✅ All FREE experiences included!\n\n🥇 1st Place: GHS 1,000\n🥈 2nd Place: GHS 500\n\nThis is the ONLY paid pass! Are you ready to compete? 🔥`;
     }
     
     // Best value / what should I get
     if (lowerMsg.includes('combo') || lowerMsg.includes('full') || lowerMsg.includes('everything') || lowerMsg.includes('best')) {
-        return `✨ Here's what we recommend:\n\n🎬 **Movie Pass** (GHS 100) - Best for movie lovers!\n• Full movie screening\n• Free popcorn & drink\n• After party included!\n\n🎮 **Gaming Pass** (GHS 120) - For FIFA champions!\n• FIFA tournament entry\n• Win up to GHS 1,500!\n• After party included!\n\n🎉 **Party Pass** (GHS 60) - Just want to party?\n• After party access\n• Live DJ & artists\n\n🕹️ Arcade & Go Karts are pay-to-play on site!\n\nWhat sounds good to you? 🌟`;
+        return `✨ **Great news - almost everything is FREE!**\n\n🎬 **Movie Screening** - FREE!\n• Just join the waitlist\n\n🎉 **After Party** - FREE!\n• Live DJ & artists included\n\n🎮 **Gaming Pass** (GHS 120) - Only if you want to compete!\n• FIFA tournament entry\n• Win up to GHS 1,500!\n\n🕹️ Arcade & Go Karts are pay-to-play on site!\n\nJoin the waitlist to get started! 🌟`;
     }
     
-    // Party Pass specific
-    if (lowerMsg.includes('party pass') || lowerMsg.includes('party ticket') || lowerMsg.includes('party only')) {
-        return `🎉 The **Party Pass** is GHS 60 and gives you access to the After Party starting at ${eventInfo.partyTime}!\n\nFeaturing:\n• ${eventInfo.dj} 🎧\n• ${eventInfo.mc} 🎤\n• Live performances by Jaymore & Keli 🎵\n\nLet's party! 💃`;
+    // Party specific
+    if (lowerMsg.includes('party pass') || lowerMsg.includes('party ticket') || lowerMsg.includes('party only') || lowerMsg.includes('after party')) {
+        return `🎉 **The After Party is FREE!**\n\nJust join the waitlist to secure your spot!\n\nStarting at ${eventInfo.partyTime} featuring:\n• ${eventInfo.dj} 🎧\n• ${eventInfo.mc} 🎤\n• Live performances by Jaymore & Keli 🎵\n\nJoin the waitlist now! 💃`;
     }
     
     // FIFA/Competition
     if (lowerMsg.includes('fifa') || lowerMsg.includes('tournament') || lowerMsg.includes('competition') || lowerMsg.includes('prize')) {
-        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\n🎮 **Gaming Pass Required** - GHS 120\nIncludes tournament entry + after party access!\n\nMay the best player win! ⚽🔥`;
+        return `🏆 **FIFA Tournament** Details:\n\n• Game: EA FC 26\n• Format: Knockout\n• Total Prize Pool: **${eventInfo.prizes.total}**\n\n🥇 1st Place: ${eventInfo.prizes.first}\n🥈 2nd Place: ${eventInfo.prizes.second}\n\n🎮 **Gaming Pass Required** - GHS 120\nThis is the ONLY thing you need to pay for!\n\nMay the best player win! ⚽🔥`;
     }
     
     // Artists/Performers
@@ -1016,7 +1112,7 @@ function getChatbotResponse(message) {
     }
     
     // Default response
-    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n🎉 **ENTRY IS FREE!**\n\n• 🏎️ Go Karts (Pay to Race)\n• 🕹️ Arcade Zone (Pay to Play)\n• 🎬 Movie Screening (Movie Pass)\n• 🎮 FIFA Tournament (Pay to Enter)\n• 🎉 After Party (Party Pass)\n• 📅 Event Date\n• 📞 Contact Info\n\nJust ask me anything about Kaizen Nights! ✨`;
+    return `Hmm, I'm not sure about that! 🤔 But I can help you with:\n\n🎉 **EVERYTHING IS FREE!**\n\n• 🎬 Movie Screening - FREE (Waitlist)\n• 🎉 After Party - FREE (Waitlist)\n• 🏎️ Go Karts - Pay to Race\n• 🕹️ Arcade Zone - Pay to Play\n• 🎮 FIFA Tournament - Gaming Pass (GHS 120)\n• 📅 Event Date & Time\n• 📞 Contact Info\n\nJust ask me anything about Kaizen Nights! ✨`;
 }
 
 // Toggle chatbot window
