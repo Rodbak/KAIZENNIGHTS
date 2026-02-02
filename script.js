@@ -792,6 +792,10 @@ document.addEventListener('DOMContentLoaded', initFloatingCTA);
 // WAITLIST FORM HANDLER
 // ===========================================
 
+// ⚠️ YOUR WHATSAPP NUMBER - Receives all waitlist registrations
+// Format: country code + number (no + or spaces)
+const YOUR_WHATSAPP_NUMBER = '233530402249';  // Your number
+
 document.addEventListener('DOMContentLoaded', () => {
     const waitlistForm = document.getElementById('waitlistForm');
     
@@ -800,7 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function handleWaitlistSubmit(e) {
+async function handleWaitlistSubmit(e) {
     e.preventDefault();
     
     const name = document.getElementById('waitlistName').value.trim();
@@ -824,7 +828,8 @@ function handleWaitlistSubmit(e) {
     }
     
     // Show loading
-    const btn = waitlistForm.querySelector('.waitlist-btn');
+    const form = document.getElementById('waitlistForm');
+    const btn = form.querySelector('.waitlist-btn');
     const btnText = btn.querySelector('.btn-text');
     const btnLoader = btn.querySelector('.btn-loader');
     
@@ -835,38 +840,207 @@ function handleWaitlistSubmit(e) {
     // Generate waitlist reference
     const waitlistRef = 'WL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
     
-    // Store in localStorage
+    // Prepare waitlist data
     const waitlistData = {
         ref: waitlistRef,
         name: name,
         email: email,
         phone: phone,
-        registeredAt: new Date().toISOString(),
-        event: 'KAIZEN NIGHTS',
-        date: '2026-02-06',
-        experiences: ['Movie Screening', 'After Party']
+        event: 'KAIZEN NIGHTS - Feb 6, 2026'
     };
     
+    // Store in localStorage
+    const localData = {
+        ...waitlistData,
+        registeredAt: new Date().toISOString(),
+        experiences: ['Movie Screening', 'After Party']
+    };
     const waitlist = JSON.parse(localStorage.getItem('kaizenWaitlist') || '[]');
-    waitlist.push(waitlistData);
+    waitlist.push(localData);
     localStorage.setItem('kaizenWaitlist', JSON.stringify(waitlist));
     
-    // Simulate API call delay
-    setTimeout(() => {
-        // Reset button
-        btn.disabled = false;
-        btnText.classList.remove('hidden');
-        btnLoader.classList.add('hidden');
-        
-        // Clear form
-        waitlistForm.reset();
-        
-        // Show success modal
-        showWaitlistSuccess(waitlistData);
-        
-        console.log('Waitlist registration:', waitlistData);
-    }, 1500);
+    // Reset button
+    btn.disabled = false;
+    btnText.classList.remove('hidden');
+    btnLoader.classList.add('hidden');
+    
+    // Clear form
+    form.reset();
+    
+    // Show success modal with WhatsApp confirmation
+    showWaitlistSuccessWithWhatsApp(localData);
+    
+    console.log('Waitlist registration saved:', localData);
 }
+
+// Success modal that sends WhatsApp notification to you
+function showWaitlistSuccessWithWhatsApp(data) {
+    // Create WhatsApp message
+    const whatsappMessage = `🎉 *NEW KAIZEN NIGHTS REGISTRATION*
+
+📋 *Reference:* ${data.ref}
+👤 *Name:* ${data.name}
+📧 *Email:* ${data.email}
+📱 *WhatsApp:* ${data.phone}
+🎬 *Event:* KAIZEN NIGHTS - Feb 6, 2026
+✨ *Access:* Movie + After Party (FREE)
+⏰ *Time:* ${new Date().toLocaleString()}`;
+
+    const whatsappURL = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+    
+    // Create success modal
+    const modal = document.createElement('div');
+    modal.className = 'waitlist-success-modal';
+    modal.innerHTML = `
+        <div class="waitlist-success-content">
+            <div class="success-icon">✓</div>
+            <h3>ALMOST DONE!</h3>
+            <p class="success-subtitle">One more step to confirm your spot 👇</p>
+            
+            <div class="success-details">
+                <div class="detail-row">
+                    <span>Name:</span>
+                    <strong>${data.name}</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Reference:</span>
+                    <strong class="ref-code">${data.ref}</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Event:</span>
+                    <strong>FEB 6, 2026 • 7PM</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Access:</span>
+                    <strong>Movie + After Party (FREE)</strong>
+                </div>
+            </div>
+            
+            <a href="${whatsappURL}" target="_blank" class="whatsapp-confirm-btn">
+                <span class="wa-icon">💬</span>
+                CONFIRM VIA WHATSAPP
+            </a>
+            <p class="whatsapp-note">Tap above to send your registration (just click send!)</p>
+            
+            <button class="close-success-btn secondary" onclick="this.closest('.waitlist-success-modal').remove()">
+                I'll do it later
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Add styles for WhatsApp button
+    if (!document.getElementById('whatsapp-btn-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'whatsapp-btn-styles';
+        styles.textContent = `
+            .whatsapp-confirm-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+                padding: 1rem;
+                background: linear-gradient(135deg, #25D366, #128C7E);
+                border: none;
+                border-radius: 8px;
+                color: white;
+                font-family: var(--font-heading);
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+                cursor: pointer;
+                text-decoration: none;
+                margin-bottom: 0.5rem;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+            .whatsapp-confirm-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            }
+            .wa-icon {
+                font-size: 1.3rem;
+            }
+            .whatsapp-note {
+                font-size: 0.8rem;
+                color: var(--light-gray);
+                margin-bottom: 1rem;
+            }
+            .close-success-btn.secondary {
+                background: transparent;
+                border: 1px solid rgba(255,255,255,0.2);
+                color: var(--light-gray);
+            }
+            .close-success-btn.secondary:hover {
+                border-color: rgba(255,255,255,0.4);
+                color: white;
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+    
+    // Animate in
+    requestAnimationFrame(() => {
+        modal.classList.add('active');
+    });
+}
+
+// ===========================================
+// WAITLIST ADMIN HELPERS
+// ===========================================
+
+// View all waitlist registrations (run in browser console)
+function viewWaitlist() {
+    const waitlist = JSON.parse(localStorage.getItem('kaizenWaitlist') || '[]');
+    console.log('📋 KAIZEN NIGHTS WAITLIST');
+    console.log('========================');
+    console.log(`Total Registrations: ${waitlist.length}`);
+    console.table(waitlist);
+    return waitlist;
+}
+
+// Export waitlist as CSV (run in browser console)
+function exportWaitlistCSV() {
+    const waitlist = JSON.parse(localStorage.getItem('kaizenWaitlist') || '[]');
+    if (waitlist.length === 0) {
+        console.log('No registrations yet!');
+        return;
+    }
+    
+    const headers = ['Reference', 'Name', 'Email', 'Phone', 'Registered At'];
+    const csvContent = [
+        headers.join(','),
+        ...waitlist.map(w => [
+            w.ref,
+            `"${w.name}"`,
+            w.email,
+            w.phone,
+            w.registeredAt
+        ].join(','))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kaizen-waitlist-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    
+    console.log(`✅ Exported ${waitlist.length} registrations to CSV!`);
+}
+
+// Clear waitlist (use with caution!)
+function clearWaitlist() {
+    if (confirm('Are you sure you want to clear all waitlist data? This cannot be undone!')) {
+        localStorage.removeItem('kaizenWaitlist');
+        console.log('🗑️ Waitlist cleared!');
+    }
+}
+
+console.log('%c📋 Waitlist Admin Commands:', 'font-size: 14px; font-weight: bold; color: #22c55e;');
+console.log('  viewWaitlist()     - View all registrations');
+console.log('  exportWaitlistCSV() - Download as CSV file');
+console.log('  clearWaitlist()    - Clear all data (careful!)');
 
 function showWaitlistSuccess(data) {
     // Create success modal
